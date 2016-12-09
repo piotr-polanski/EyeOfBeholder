@@ -1,0 +1,6 @@
+﻿@startuml
+SomeObject <|-- SomeArrayList
+SomeArrayList : Object[] elementData
+SomeArrayList :  size()
+SomeObject :  equals()
+@enduml
