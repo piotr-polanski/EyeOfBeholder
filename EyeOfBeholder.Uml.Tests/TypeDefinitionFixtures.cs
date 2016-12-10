@@ -59,5 +59,18 @@ namespace EyeOfBeholder.Uml.Tests
                 dependentType
             };
         }
+
+        public static List<TypeDefinition> GetRealizationExample()
+        {
+            var realizations = new List<Realization>
+            {
+                new Realization("Interface")
+            };
+            var interfaceRealization = new TypeDefinition("InterfaceRealization", realizations);
+            return new List<TypeDefinition>
+            {
+                interfaceRealization
+            };
+        }
     }
 }

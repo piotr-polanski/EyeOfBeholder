@@ -28,6 +28,11 @@ namespace EyeOfBeholder.Uml
                     umlString.Append($"{typeDefinitionDependency.Name} <.. {typeDefinition.Name}")
                         .AppendLine();
                 }
+                foreach (var typeDefinitionRealization in typeDefinition.Realizations)
+                {
+                    umlString.Append($"{typeDefinitionRealization.Name} <|.. {typeDefinition.Name}")
+                        .AppendLine();
+                }
             }
             umlString.Append("@enduml");
             return umlString.ToString();

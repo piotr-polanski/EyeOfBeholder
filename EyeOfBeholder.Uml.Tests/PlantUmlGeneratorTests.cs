@@ -55,6 +55,21 @@ namespace EyeOfBeholder.Uml.Tests
             //assert
             Assert.Equal(expectedUmlString, outputWithFixedNewLines);
         }
+        [Fact]
+        public void Realization_Given_ValidTypeDefinitions_Returns_ValidPlantUmlString()
+        {
+            //arrange
+            var plantUmlGenerator = new PlantUmlGenerator();
+            var expectedUmlString = File.ReadAllText(@"testData\Realization.puml");
+            var typeDefinitions = TypeDefinitionFixtures.GetRealizationExample();
+
+            //act
+            var plantUmlString = plantUmlGenerator.GenerateUmlString(typeDefinitions);
+            var outputWithFixedNewLines = ConvertNewLineCode(plantUmlString, Environment.NewLine);
+
+            //assert
+            Assert.Equal(expectedUmlString, outputWithFixedNewLines);
+        }
         private string ConvertNewLineCode(string text, string newline)
         {
             var reg = new System.Text.RegularExpressions.Regex("\r\n|\r|\n");
