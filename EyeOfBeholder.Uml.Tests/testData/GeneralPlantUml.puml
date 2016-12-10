@@ -1,10 +1,14 @@
 ﻿@startuml
-class SomeObject <|-- SomeArrayList
+class SomeArrayList --> SomeObject : elementData
+class SomeArrayList --> string : someAttribute
 class SomeArrayList {
-+ elementData : Object[] 
-+  size()
++ elementData : SomeObject
+- someAttribute : string
 }
 class SomeObject {
-+  equals()
++ equals() : bool
+}
+abstract SomeObject <|-- string
+class string {
 }
 @enduml
