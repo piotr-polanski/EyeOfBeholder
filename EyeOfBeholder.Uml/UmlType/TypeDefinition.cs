@@ -9,7 +9,7 @@ namespace EyeOfBeholder.Uml.UmlType
         {
             Name = name;
             Associations = new List<Association>();
-            Members = new List<Member>();
+            Members = new List<Attribute>();
         }
 
         public TypeDefinition(string name, List<Dependency> dependencies)
@@ -17,7 +17,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             Dependencies = dependencies;
             Associations = new List<Association>();
-            Members = new List<Member>();
+            Members = new List<Attribute>();
             Realizations = new List<Realization>();
         }
 
@@ -26,12 +26,12 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             SuperClass = superClass;
             Associations = new List<Association>();
-            Members = new List<Member>();
+            Members = new List<Attribute>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
 
         }
-        public TypeDefinition(string name, List<Member> members)
+        public TypeDefinition(string name, List<Attribute> members)
         {
             Name = name;
             Members = members;
@@ -40,7 +40,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Dependencies = new List<Dependency>();
         }
 
-        public TypeDefinition(string name, SuperClass superClass, List<Member> members)
+        public TypeDefinition(string name, SuperClass superClass, List<Attribute> members)
         {
             Name = name;
             Members = members;
@@ -52,7 +52,7 @@ namespace EyeOfBeholder.Uml.UmlType
         public TypeDefinition(
             string name,
             List<Association> associations, 
-            List<Member> members, 
+            List<Attribute> members, 
             List<Realization> realizations, 
             SuperClass superClass,
             List<Dependency> dependencies
@@ -71,13 +71,13 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             Realizations = realizations;
             Associations = new List<Association>();
-            Members = new List<Member>();
+            Members = new List<Attribute>();
             Dependencies = new List<Dependency>();
         }
 
 
         public List<Association> Associations { get; private set; }
-        public List<Member> Members { get; private set; }
+        public List<Attribute> Members { get; private set; }
         public List<Realization> Realizations { get; private set; }
         public SuperClass SuperClass { get; private set; }
         public string Name { get; private set; }

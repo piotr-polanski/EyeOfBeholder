@@ -7,9 +7,9 @@ namespace EyeOfBeholder.Uml.Tests
     {
         public static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
         {
-            var someArrayListMember1 = new Member("elementData", "Object[]");
-            var someArrayListMember2 = new Member("size()");
-            var someArrayListMembers = new List<Member>
+            var someArrayListMember1 = new Attribute("elementData", "Object[]", VisibilityType.Public);
+            var someArrayListMember2 = new Attribute("size()");
+            var someArrayListMembers = new List<Attribute>
             {
                 someArrayListMember1,
                 someArrayListMember2
@@ -21,8 +21,8 @@ namespace EyeOfBeholder.Uml.Tests
                 someArrayListMembers
                 );
 
-            var someObjectMember1 = new Member("equals()");
-            var someObjectMembers = new List<Member>
+            var someObjectMember1 = new Attribute("equals()");
+            var someObjectMembers = new List<Attribute>
             {
                 someObjectMember1
             };
@@ -37,7 +37,7 @@ namespace EyeOfBeholder.Uml.Tests
 
         public static List<TypeDefinition> GetGeneralizationsExample()
         {
-            var superType = new SuperClass("SuperType", PlantUmlEntityType.Abstract);
+            var superType = new SuperClass("SuperType", UmlEntityType.Abstract);
             var subType1 = new TypeDefinition("SubType1", superType);
             var subType2 = new TypeDefinition("SubType2", superType);
 
@@ -51,7 +51,7 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var dependencies = new List<Dependency>
             {
-                new Dependency("Dependency", PlantUmlEntityType.Enum)
+                new Dependency("Dependency", UmlEntityType.Enum)
             };
             var dependentType = new TypeDefinition("DependendType", dependencies);
             return new List<TypeDefinition>
@@ -64,7 +64,7 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var realizations = new List<Realization>
             {
-                new Realization("Interface", PlantUmlEntityType.Interface)
+                new Realization("Interface", UmlEntityType.Interface)
             };
             var interfaceRealization = new TypeDefinition("InterfaceRealization", realizations);
             return new List<TypeDefinition>

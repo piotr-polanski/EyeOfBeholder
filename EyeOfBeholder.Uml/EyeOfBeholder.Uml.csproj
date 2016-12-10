@@ -44,11 +44,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmlType\Association.cs" />
     <Compile Include="UmlType\Dependency.cs" />
-    <Compile Include="UmlType\Member.cs" />
-    <Compile Include="UmlType\PlantUmlEntityType.cs" />
+    <Compile Include="UmlType\Attribute.cs" />
+    <Compile Include="UmlType\UmlEntityType.cs" />
     <Compile Include="UmlType\Realization.cs" />
     <Compile Include="UmlType\SuperClass.cs" />
     <Compile Include="UmlType\TypeDefinition.cs" />
+    <Compile Include="UmlType\VisibilityType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

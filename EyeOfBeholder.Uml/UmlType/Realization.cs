@@ -3,9 +3,9 @@
     public class Realization
     {
         public string Name { get; private set; }
-        public PlantUmlEntityType Type { get; private set; }
+        public UmlEntityType Type { get; private set; }
 
-        public Realization(string name, PlantUmlEntityType type)
+        public Realization(string name, UmlEntityType type)
         {
             Name = name;
             Type = type;

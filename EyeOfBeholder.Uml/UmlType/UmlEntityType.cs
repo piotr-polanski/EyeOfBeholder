@@ -1,6 +1,6 @@
 ﻿namespace EyeOfBeholder.Uml.UmlType
 {
-    public enum PlantUmlEntityType
+    public enum UmlEntityType
     {
         Class,
         Interface,

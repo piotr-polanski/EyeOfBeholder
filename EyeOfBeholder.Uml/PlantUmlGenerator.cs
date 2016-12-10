@@ -20,7 +20,7 @@ namespace EyeOfBeholder.Uml
                 foreach (var typeDefinitionMember in typeDefinition.Members)
                 {
                     umlString.Append(
-                        $"{typeDefinition.Name} : {typeDefinitionMember.ReturnType} {typeDefinitionMember.Name}")
+                        $"{typeDefinition.Name} : {typeDefinitionMember.TypeName} {typeDefinitionMember.Name}")
                         .AppendLine();
                 }
                 foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
@@ -40,17 +40,17 @@ namespace EyeOfBeholder.Uml
             return umlString.ToString();
         }
 
-        private string GetEntityTypeName(PlantUmlEntityType type)
+        private string GetEntityTypeName(UmlEntityType type)
         {
             switch (type)
             {
-                case PlantUmlEntityType.Interface:
+                case UmlEntityType.Interface:
                     return "interface";
-                case PlantUmlEntityType.Abstract:
+                case UmlEntityType.Abstract:
                     return "abstract";
-                case PlantUmlEntityType.Class:
+                case UmlEntityType.Class:
                     return "class";
-                case PlantUmlEntityType.Enum:
+                case UmlEntityType.Enum:
                     return "enum";
                 default:
                     return "class";
