@@ -2,7 +2,17 @@
 {
     public class Member
     {
-        public string Name { get; set; }
-        public string ReturnType { get; set; }
+        public Member(string name, string returnType)
+        {
+            Name = name;
+            ReturnType = returnType;
+        }
+
+        public Member(string name)
+        {
+            Name = name;
+        }
+        public string Name { get; private set; }
+        public string ReturnType { get; private set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using EyeOfBeholder.Uml.UmlType;
+using Ploeh.AutoFixture;
 using Xunit;
 
 namespace EyeOfBeholder.Uml.Tests
@@ -13,43 +14,8 @@ namespace EyeOfBeholder.Uml.Tests
         {
             //arrange
             var plantUmlGenerator = new PlantUmlGenerator();
-            var expectedUmlString = File.ReadAllText(@"testData\GeneralPlantUml.txt");
-            var typeDefinitions = new List<TypeDefinition>
-            {
-                new TypeDefinition()
-                {
-                    Name = "SomeArrayList",
-                    Associations = new List<Association>(),
-                    Members = new List<Member>
-                    {
-                        new Member
-                        {
-                            Name = "elementData",
-                            ReturnType = "Object[]"
-                        },
-                        new Member
-                        {
-                            Name = "size()"
-                        }
-                    },
-                    Realizations = new List<Realization>(),
-                    SuperClass = new SuperClass
-                    {
-                        Name = "SomeObject"
-                    }
-                },
-                new TypeDefinition
-                {
-                    Name = "SomeObject",
-                    Members = new List<Member>
-                    {
-                        new Member
-                        {
-                            Name = "equals()"
-                        }
-                    }
-                }
-            };
+            var expectedUmlString = File.ReadAllText(@"testData\GeneralPlantUml.puml");
+            var typeDefinitions = GetTypeDefinitionsSimpleExample();
 
             //act
             var plantUmlString = plantUmlGenerator.GenerateUmlString(typeDefinitions).ToString();
@@ -57,6 +23,33 @@ namespace EyeOfBeholder.Uml.Tests
 
             //assert
             Assert.Equal(expectedUmlString, outputWithFixedNewLines);
+        }
+
+        private static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
+        {
+            var someArrayListMember1 = new Member("elementData", "Object[]");
+            var someArrayListMember2 = new Member("size()");
+            var someArrayListMembers = new List<Member>
+            {
+                someArrayListMember1,
+                someArrayListMember2
+            };
+            var someArrayListSuperClass = new SuperClass("SomeObject");
+            var someArrayTypeDefinition = new TypeDefinition("SomeArrayList", new List<Association>(), someArrayListMembers,
+                new List<Realization>(), someArrayListSuperClass);
+
+            var someObjectMember1 = new Member("equals()");
+            var someObjectMembers = new List<Member>
+            {
+                someObjectMember1
+            };
+            var someObjectTypeDefinition = new TypeDefinition("SomeObject", someObjectMembers);
+
+            return new List<TypeDefinition>
+            {
+                someArrayTypeDefinition,
+                someObjectTypeDefinition
+            };
         }
 
         private string ConvertNewLineCode(string text, string newline)
