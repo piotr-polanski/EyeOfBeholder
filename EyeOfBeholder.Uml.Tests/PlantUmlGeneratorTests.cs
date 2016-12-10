@@ -35,8 +35,8 @@ namespace EyeOfBeholder.Uml.Tests
                 someArrayListMember2
             };
             var someArrayListSuperClass = new SuperClass("SomeObject");
-            var someArrayTypeDefinition = new TypeDefinition("SomeArrayList", new List<Association>(), someArrayListMembers,
-                new List<Realization>(), someArrayListSuperClass);
+            var someArrayTypeDefinition = new TypeDefinition("SomeArrayList", someArrayListMembers,
+                someArrayListSuperClass);
 
             var someObjectMember1 = new Member("equals()");
             var someObjectMembers = new List<Member>

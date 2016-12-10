@@ -27,6 +27,13 @@ namespace EyeOfBeholder.Uml.UmlType
             Realizations = new List<Realization>();
         }
 
+        public TypeDefinition(string name, List<Member> members, SuperClass superClass)
+        {
+            Name = name;
+            Members = members;
+            SuperClass = superClass;
+        }
+
         public List<Association> Associations { get; private set; }
         public List<Member> Members { get; private set; }
         public List<Realization> Realizations { get; private set; }
