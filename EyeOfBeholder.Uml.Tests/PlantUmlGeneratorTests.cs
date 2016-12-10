@@ -33,6 +33,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new object[] {TypeDefinitionTestFixtures.GetRealizationExample(), File.ReadAllText(@"testData\Realization.puml")},
                 new object[] {TypeDefinitionTestFixtures.GetAttributesExample(), File.ReadAllText(@"testData\Attributes.puml")},
                 new object[] {TypeDefinitionTestFixtures.GetOperationsExample(), File.ReadAllText(@"testData\Operations.puml")},
+                new object[] {TypeDefinitionTestFixtures.GetAssociationsExample(), File.ReadAllText(@"testData\Association.puml")},
             };
         }
         

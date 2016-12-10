@@ -104,5 +104,21 @@ namespace EyeOfBeholder.Uml.Tests
                 typeDefinitions
             };
         }
+
+        public static List<TypeDefinition> GetAssociationsExample()
+        {
+            var association1 = new Association("associationAttribute1Name",
+                "Association1", VisibilityType.Public, UmlEntityType.Class);
+            var association2 = new Association("associationAttribute2Name",
+                "Association2", VisibilityType.Private, UmlEntityType.Class);
+            var associations = new List<Association>
+            {
+                association1, association2
+            };
+            return new List<TypeDefinition>
+            {
+                new TypeDefinition("Class", associations)
+            };
+        }
     }
 }

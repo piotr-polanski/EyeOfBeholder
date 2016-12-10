@@ -6,7 +6,7 @@ namespace EyeOfBeholder.Uml.UmlType
 {
     public class TypeDefinition
     {
-        public TypeDefinition(string name)
+        public TypeDefinition(string name, UmlEntityType superClass)
         {
             Name = name;
             Associations = new List<Association>();
@@ -93,6 +93,16 @@ namespace EyeOfBeholder.Uml.UmlType
             Attributes = new List<Attribute>();
             Dependencies = new List<Dependency>();
             Realizations = new List<Realization>();
+        }
+
+        public TypeDefinition(string name, List<Association> associations)
+        {
+            Name = name;
+            Associations = associations;
+            Attributes = new List<Attribute>();
+            Dependencies = new List<Dependency>();
+            Realizations = new List<Realization>();
+            Operations = new List<Operation>();
         }
 
 

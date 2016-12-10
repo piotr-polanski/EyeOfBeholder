@@ -12,6 +12,12 @@ namespace EyeOfBeholder.Uml
             umlString.Append("@startuml").AppendLine();
             foreach (var typeDefinition in typeDefinitions)
             {
+                foreach (var association in typeDefinition.Associations)
+                {
+                    var associationTypeName = GetEntityTypeName(association.Type);
+                    umlString.Append($"{associationTypeName} {typeDefinition.Name} --> {association.BaseTypeName} : {association.AttributeName}")
+                        .AppendLine();
+                }
                 AppendSuperClassIfExist(typeDefinition, umlString);
                 var typeDefinitionType = GetEntityTypeName(typeDefinition.Type);
                 umlString.Append(
