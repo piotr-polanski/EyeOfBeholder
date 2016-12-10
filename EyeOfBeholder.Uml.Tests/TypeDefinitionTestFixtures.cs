@@ -3,7 +3,7 @@ using EyeOfBeholder.Uml.UmlType;
 
 namespace EyeOfBeholder.Uml.Tests
 {
-    public static class TypeDefinitionFixtures
+    public static class TypeDefinitionTestFixtures
     {
         public static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
         {
@@ -37,7 +37,7 @@ namespace EyeOfBeholder.Uml.Tests
 
         public static List<TypeDefinition> GetGeneralizationsExample()
         {
-            var superType = new SuperClass("SuperType");
+            var superType = new SuperClass("SuperType", PlantUmlEntityType.Abstract);
             var subType1 = new TypeDefinition("SubType1", superType);
             var subType2 = new TypeDefinition("SubType2", superType);
 
@@ -51,7 +51,7 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var dependencies = new List<Dependency>
             {
-                new Dependency("Dependency")
+                new Dependency("Dependency", PlantUmlEntityType.Enum)
             };
             var dependentType = new TypeDefinition("DependendType", dependencies);
             return new List<TypeDefinition>
@@ -64,7 +64,7 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var realizations = new List<Realization>
             {
-                new Realization("Interface")
+                new Realization("Interface", PlantUmlEntityType.Interface)
             };
             var interfaceRealization = new TypeDefinition("InterfaceRealization", realizations);
             return new List<TypeDefinition>

@@ -27,10 +27,10 @@ namespace EyeOfBeholder.Uml.Tests
         {
             return new object[]
             {
-                new object[] {TypeDefinitionFixtures.GetTypeDefinitionsSimpleExample(), File.ReadAllText(@"testData\GeneralPlantUml.puml")},
-                new object[] {TypeDefinitionFixtures.GetGeneralizationsExample(), File.ReadAllText(@"testData\Generalization.puml")},
-                new object[] {TypeDefinitionFixtures.GetDependencyExample(), File.ReadAllText(@"testData\Dependency.puml")},
-                new object[] {TypeDefinitionFixtures.GetRealizationExample(), File.ReadAllText(@"testData\Realization.puml")},
+                new object[] {TypeDefinitionTestFixtures.GetTypeDefinitionsSimpleExample(), File.ReadAllText(@"testData\GeneralPlantUml.puml")},
+                new object[] {TypeDefinitionTestFixtures.GetGeneralizationsExample(), File.ReadAllText(@"testData\Generalization.puml")},
+                new object[] {TypeDefinitionTestFixtures.GetDependencyExample(), File.ReadAllText(@"testData\Dependency.puml")},
+                new object[] {TypeDefinitionTestFixtures.GetRealizationExample(), File.ReadAllText(@"testData\Realization.puml")},
             };
         }
         

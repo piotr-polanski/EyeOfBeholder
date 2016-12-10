@@ -25,12 +25,14 @@ namespace EyeOfBeholder.Uml
                 }
                 foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
                 {
-                    umlString.Append($"{typeDefinitionDependency.Name} <.. {typeDefinition.Name}")
+                    var dependencyTypeName = GetEntityTypeName(typeDefinitionDependency.Type);
+                    umlString.Append($"{dependencyTypeName} {typeDefinitionDependency.Name} <.. {typeDefinition.Name}")
                         .AppendLine();
                 }
                 foreach (var typeDefinitionRealization in typeDefinition.Realizations)
                 {
-                    umlString.Append($"{typeDefinitionRealization.Name} <|.. {typeDefinition.Name}")
+                    var realizationTypeName = GetEntityTypeName(typeDefinitionRealization.Type);
+                    umlString.Append($"{realizationTypeName} {typeDefinitionRealization.Name} <|.. {typeDefinition.Name}")
                         .AppendLine();
                 }
             }
@@ -38,11 +40,30 @@ namespace EyeOfBeholder.Uml
             return umlString.ToString();
         }
 
-        private static void AppendSuperClassIfExist(TypeDefinition typeDefinition, StringBuilder umlString)
+        private string GetEntityTypeName(PlantUmlEntityType type)
+        {
+            switch (type)
+            {
+                case PlantUmlEntityType.Interface:
+                    return "interface";
+                case PlantUmlEntityType.Abstract:
+                    return "abstract";
+                case PlantUmlEntityType.Class:
+                    return "class";
+                case PlantUmlEntityType.Enum:
+                    return "enum";
+                default:
+                    return "class";
+            }
+        }
+
+        private void AppendSuperClassIfExist(TypeDefinition typeDefinition, StringBuilder umlString)
         {
             if (typeDefinition.SuperClass != null)
             {
-                umlString.Append($"{typeDefinition.SuperClass.Name} <|-- {typeDefinition.Name}\n");
+                var superClassTypeName = GetEntityTypeName(typeDefinition.SuperClass.Type);
+                umlString.Append($"{superClassTypeName} {typeDefinition.SuperClass.Name} <|-- {typeDefinition.Name}")
+                    .AppendLine();
             }
         }
     }
