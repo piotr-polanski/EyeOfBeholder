@@ -20,7 +20,13 @@ namespace EyeOfBeholder.Uml
                 foreach (var typeDefinitionMember in typeDefinition.Members)
                 {
                     umlString.Append(
-                        $"{typeDefinition.Name} : {typeDefinitionMember.ReturnType} {typeDefinitionMember.Name}\n");
+                        $"{typeDefinition.Name} : {typeDefinitionMember.ReturnType} {typeDefinitionMember.Name}")
+                        .AppendLine();
+                }
+                foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
+                {
+                    umlString.Append($"{typeDefinitionDependency.Name} <.. {typeDefinition.Name}")
+                        .AppendLine();
                 }
             }
             umlString.Append("@enduml");

@@ -15,7 +15,7 @@ namespace EyeOfBeholder.Uml.Tests
             //arrange
             var plantUmlGenerator = new PlantUmlGenerator();
             var expectedUmlString = File.ReadAllText(@"testData\GeneralPlantUml.puml");
-            var typeDefinitions = GetTypeDefinitionsSimpleExample();
+            var typeDefinitions = TypeDefinitionFixtures.GetTypeDefinitionsSimpleExample();
 
             //act
             var plantUmlString = plantUmlGenerator.GenerateUmlString(typeDefinitions).ToString();
@@ -24,34 +24,37 @@ namespace EyeOfBeholder.Uml.Tests
             //assert
             Assert.Equal(expectedUmlString, outputWithFixedNewLines);
         }
-
-        private static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
+        [Fact]
+        public void Generalization_Given_ValidTypeDefinitions_Returns_ValidPlantUmlString()
         {
-            var someArrayListMember1 = new Member("elementData", "Object[]");
-            var someArrayListMember2 = new Member("size()");
-            var someArrayListMembers = new List<Member>
-            {
-                someArrayListMember1,
-                someArrayListMember2
-            };
-            var someArrayListSuperClass = new SuperClass("SomeObject");
-            var someArrayTypeDefinition = new TypeDefinition("SomeArrayList", someArrayListMembers,
-                someArrayListSuperClass);
+            //arrange
+            var plantUmlGenerator = new PlantUmlGenerator();
+            var expectedUmlString = File.ReadAllText(@"testData\Generalization.puml");
+            var typeDefinitions = TypeDefinitionFixtures.GetGeneralizationsExample();
 
-            var someObjectMember1 = new Member("equals()");
-            var someObjectMembers = new List<Member>
-            {
-                someObjectMember1
-            };
-            var someObjectTypeDefinition = new TypeDefinition("SomeObject", someObjectMembers);
+            //act
+            var plantUmlString = plantUmlGenerator.GenerateUmlString(typeDefinitions);
+            var outputWithFixedNewLines = ConvertNewLineCode(plantUmlString, Environment.NewLine);
 
-            return new List<TypeDefinition>
-            {
-                someArrayTypeDefinition,
-                someObjectTypeDefinition
-            };
+            //assert
+            Assert.Equal(expectedUmlString, outputWithFixedNewLines);
         }
 
+        [Fact]
+        public void Dependency_Given_ValidTypeDefinitions_Returns_ValidPlantUmlString()
+        {
+            //arrange
+            var plantUmlGenerator = new PlantUmlGenerator();
+            var expectedUmlString = File.ReadAllText(@"testData\Dependency.puml");
+            var typeDefinitions = TypeDefinitionFixtures.GetDependencyExample();
+
+            //act
+            var plantUmlString = plantUmlGenerator.GenerateUmlString(typeDefinitions);
+            var outputWithFixedNewLines = ConvertNewLineCode(plantUmlString, Environment.NewLine);
+
+            //assert
+            Assert.Equal(expectedUmlString, outputWithFixedNewLines);
+        }
         private string ConvertNewLineCode(string text, string newline)
         {
             var reg = new System.Text.RegularExpressions.Regex("\r\n|\r|\n");

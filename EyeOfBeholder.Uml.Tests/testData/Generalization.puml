@@ -1,0 +1,4 @@
+﻿@startuml
+SuperType <|-- SubType1
+SuperType <|-- SubType2
+@enduml
