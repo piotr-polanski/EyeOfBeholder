@@ -14,6 +14,7 @@ namespace EyeOfBeholder.Uml.UmlType
 
         public TypeDefinition(string name, List<Dependency> dependencies)
         {
+            Name = name;
             Dependencies = dependencies;
             Associations = new List<Association>();
             Members = new List<Member>();
