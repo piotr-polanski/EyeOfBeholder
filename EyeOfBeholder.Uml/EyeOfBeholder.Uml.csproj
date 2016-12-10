@@ -45,6 +45,7 @@
     <Compile Include="UmlType\Association.cs" />
     <Compile Include="UmlType\Dependency.cs" />
     <Compile Include="UmlType\Attribute.cs" />
+    <Compile Include="UmlType\Operation.cs" />
     <Compile Include="UmlType\UmlEntityType.cs" />
     <Compile Include="UmlType\Realization.cs" />
     <Compile Include="UmlType\SuperClass.cs" />

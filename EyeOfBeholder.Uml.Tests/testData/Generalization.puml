@@ -1,4 +1,8 @@
 ﻿@startuml
 abstract SuperType <|-- SubType1
+class SubType1 {
+}
 abstract SuperType <|-- SubType2
+class SubType2 {
+}
 @enduml

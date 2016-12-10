@@ -5,35 +5,35 @@ namespace EyeOfBeholder.Uml.Tests
 {
     public static class TypeDefinitionTestFixtures
     {
-        public static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
-        {
-            var someArrayListMember1 = new Attribute("elementData", "Object[]", VisibilityType.Public);
-            var someArrayListMember2 = new Attribute("size()");
-            var someArrayListMembers = new List<Attribute>
-            {
-                someArrayListMember1,
-                someArrayListMember2
-            };
-            var someArrayListSuperClass = new SuperClass("SomeObject");
-            var someArrayTypeDefinition = new TypeDefinition(
-                "SomeArrayList", 
-                someArrayListSuperClass,
-                someArrayListMembers
-                );
+        //public static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
+        //{
+        //    var someArrayListMember1 = new Attribute("elementData", "Object[]", VisibilityType.Public);
+        //    var someArrayListMember2 = new Attribute("size()");
+        //    var someArrayListMembers = new List<Attribute>
+        //    {
+        //        someArrayListMember1,
+        //        someArrayListMember2
+        //    };
+        //    var someArrayListSuperClass = new SuperClass("SomeObject");
+        //    var someArrayTypeDefinition = new TypeDefinition(
+        //        "SomeArrayList", 
+        //        someArrayListSuperClass,
+        //        someArrayListMembers
+        //        );
+            
+        //    var someObjectMember1 = new Attribute("equals()");
+        //    var someObjectMembers = new List<Attribute>
+        //    {
+        //        someObjectMember1
+        //    };
+        //    var someObjectTypeDefinition = new TypeDefinition("SomeObject", someObjectMembers);
 
-            var someObjectMember1 = new Attribute("equals()");
-            var someObjectMembers = new List<Attribute>
-            {
-                someObjectMember1
-            };
-            var someObjectTypeDefinition = new TypeDefinition("SomeObject", someObjectMembers);
-
-            return new List<TypeDefinition>
-            {
-                someArrayTypeDefinition,
-                someObjectTypeDefinition
-            };
-        }
+        //    return new List<TypeDefinition>
+        //    {
+        //        someArrayTypeDefinition,
+        //        someObjectTypeDefinition
+        //    };
+        //}
 
         public static List<TypeDefinition> GetGeneralizationsExample()
         {
@@ -70,6 +70,22 @@ namespace EyeOfBeholder.Uml.Tests
             return new List<TypeDefinition>
             {
                 interfaceRealization
+            };
+        }
+
+        public static List<TypeDefinition> GetAttributesExample()
+        {
+            var attributes = new List<Attribute>
+            {
+                new Attribute("publicAttribute", "Object[]", VisibilityType.Public),
+                new Attribute("privateAttribute", "String", VisibilityType.Private),
+                new Attribute("protectedAttribute", "int", VisibilityType.Protected),
+                new Attribute("packagePrivateAttribute", "dupa", VisibilityType.Package),
+            };
+            var typeDefinitions = new TypeDefinition("SomeArrayList", attributes);
+            return new List<TypeDefinition>
+            {
+                typeDefinitions
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 
 namespace EyeOfBeholder.Uml.UmlType
@@ -9,7 +10,7 @@ namespace EyeOfBeholder.Uml.UmlType
         {
             Name = name;
             Associations = new List<Association>();
-            Members = new List<Attribute>();
+            Attributes = new List<Attribute>();
         }
 
         public TypeDefinition(string name, List<Dependency> dependencies)
@@ -17,7 +18,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             Dependencies = dependencies;
             Associations = new List<Association>();
-            Members = new List<Attribute>();
+            Attributes = new List<Attribute>();
             Realizations = new List<Realization>();
         }
 
@@ -26,24 +27,24 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             SuperClass = superClass;
             Associations = new List<Association>();
-            Members = new List<Attribute>();
+            Attributes = new List<Attribute>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
 
         }
-        public TypeDefinition(string name, List<Attribute> members)
+        public TypeDefinition(string name, List<Attribute> attributes)
         {
             Name = name;
-            Members = members;
+            Attributes = attributes;
             Associations = new List<Association>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
         }
 
-        public TypeDefinition(string name, SuperClass superClass, List<Attribute> members)
+        public TypeDefinition(string name, SuperClass superClass, List<Attribute> attributes)
         {
             Name = name;
-            Members = members;
+            Attributes = attributes;
             SuperClass = superClass;
             Associations = new List<Association>();
             Realizations = new List<Realization>();
@@ -52,17 +53,19 @@ namespace EyeOfBeholder.Uml.UmlType
         public TypeDefinition(
             string name,
             List<Association> associations, 
-            List<Attribute> members, 
+            List<Attribute> attributes, 
             List<Realization> realizations, 
             SuperClass superClass,
-            List<Dependency> dependencies
+            List<Dependency> dependencies,
+            List<Operation> operations
             )
         {
             Associations = associations;
-            Members = members;
+            Attributes = attributes;
             Realizations = realizations;
             SuperClass = superClass;
             Dependencies = dependencies;
+            Operations = operations;
             Name = name;
         }
 
@@ -71,16 +74,18 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             Realizations = realizations;
             Associations = new List<Association>();
-            Members = new List<Attribute>();
+            Attributes = new List<Attribute>();
             Dependencies = new List<Dependency>();
         }
 
 
         public List<Association> Associations { get; private set; }
-        public List<Attribute> Members { get; private set; }
+        public List<Attribute> Attributes { get; private set; }
         public List<Realization> Realizations { get; private set; }
         public SuperClass SuperClass { get; private set; }
         public string Name { get; private set; }
         public List<Dependency> Dependencies { get; private set; }
+        public List<Operation> Operations { get; set; }
+        public UmlEntityType Type { get; private set; }
     }
 }

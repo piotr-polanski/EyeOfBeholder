@@ -1,0 +1,8 @@
+﻿@startuml
+class SomeArrayList {
++ publicAttribute : Object[]
+- privateAttribute : String
+# protectedAttribute : int
+~ packagePrivateAttribute : dupa
+}
+@enduml

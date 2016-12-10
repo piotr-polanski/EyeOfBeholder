@@ -1,6 +1,10 @@
 ﻿@startuml
 class SomeObject <|-- SomeArrayList
-SomeArrayList : Object[] elementData
-SomeArrayList :  size()
-SomeObject :  equals()
+class SomeArrayList {
++ elementData : Object[] 
++  size()
+}
+class SomeObject {
++  equals()
+}
 @enduml

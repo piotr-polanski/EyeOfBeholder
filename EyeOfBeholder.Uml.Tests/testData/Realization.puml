@@ -1,3 +1,5 @@
 ﻿@startuml
+class InterfaceRealization {
+}
 interface Interface <|.. InterfaceRealization
 @enduml

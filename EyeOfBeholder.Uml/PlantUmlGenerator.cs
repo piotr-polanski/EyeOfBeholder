@@ -6,23 +6,24 @@ namespace EyeOfBeholder.Uml
 {
     public class PlantUmlGenerator
     {
-        public PlantUmlGenerator()
-        {
-        }
-
         public string GenerateUmlString(List<TypeDefinition> typeDefinitions)
         {
             var umlString = new StringBuilder();
-            umlString.Append("@startuml\n");
+            umlString.Append("@startuml").AppendLine();
             foreach (var typeDefinition in typeDefinitions)
             {
                 AppendSuperClassIfExist(typeDefinition, umlString);
-                foreach (var typeDefinitionMember in typeDefinition.Members)
+                var typeDefinitionType = GetEntityTypeName(typeDefinition.Type);
+                umlString.Append(
+                    $"{typeDefinitionType} {typeDefinition.Name} {{").AppendLine();
+                foreach (var typeDefinitionAttribute in typeDefinition.Attributes)
                 {
-                    umlString.Append(
-                        $"{typeDefinition.Name} : {typeDefinitionMember.TypeName} {typeDefinitionMember.Name}")
+                    var attributeVisibility = GetAttributeVisibilityFrom(typeDefinitionAttribute.VisibilityType);
+                    umlString.Append($"{attributeVisibility} {typeDefinitionAttribute.Name} : " +
+                                     $"{typeDefinitionAttribute.TypeName}")
                         .AppendLine();
                 }
+                umlString.Append("}").AppendLine();
                 foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
                 {
                     var dependencyTypeName = GetEntityTypeName(typeDefinitionDependency.Type);
@@ -38,6 +39,23 @@ namespace EyeOfBeholder.Uml
             }
             umlString.Append("@enduml");
             return umlString.ToString();
+        }
+
+        private string GetAttributeVisibilityFrom(VisibilityType visibilityType)
+        {
+            switch (visibilityType)
+            {
+                case VisibilityType.Public:
+                    return "+";
+                case VisibilityType.Package:
+                    return "~";
+                case VisibilityType.Private:
+                    return "-";
+                case VisibilityType.Protected:
+                    return "#";
+                default:
+                    return "+";
+            }
         }
 
         private string GetEntityTypeName(UmlEntityType type)
