@@ -2,6 +2,11 @@
 {
     public class SuperClass
     {
-        public string Name { get; set; }
+        public SuperClass(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; private set; }
     }
 }
