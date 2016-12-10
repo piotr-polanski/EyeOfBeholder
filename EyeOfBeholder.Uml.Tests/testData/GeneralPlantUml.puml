@@ -1,5 +1,5 @@
 ﻿@startuml
-SomeObject <|-- SomeArrayList
+class SomeObject <|-- SomeArrayList
 SomeArrayList : Object[] elementData
 SomeArrayList :  size()
 SomeObject :  equals()
