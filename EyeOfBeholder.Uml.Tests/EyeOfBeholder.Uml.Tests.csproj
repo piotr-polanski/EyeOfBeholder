@@ -79,6 +79,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="testData\Operations.puml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="testData\Dependency.puml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

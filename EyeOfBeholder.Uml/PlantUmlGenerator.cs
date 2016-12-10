@@ -23,11 +23,18 @@ namespace EyeOfBeholder.Uml
                                      $"{typeDefinitionAttribute.TypeName}")
                         .AppendLine();
                 }
+                foreach (var typeDefinitionOperation in typeDefinition.Operations)
+                {
+                    var operationVisibility = GetAttributeVisibilityFrom(typeDefinitionOperation.VisibilityType);
+                    umlString.Append($"{operationVisibility} {typeDefinitionOperation.Name} : " +
+                                     $"{typeDefinitionOperation.ReturnTypeName}")
+                        .AppendLine();
+                }
                 umlString.Append("}").AppendLine();
                 foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
                 {
                     var dependencyTypeName = GetEntityTypeName(typeDefinitionDependency.Type);
-                    umlString.Append($"{dependencyTypeName} {typeDefinitionDependency.Name} <.. {typeDefinition.Name}")
+                    umlString.Append($"{dependencyTypeName} {typeDefinitionDependency.ClassName} <.. {typeDefinition.Name} : {typeDefinitionDependency.RelationName}")
                         .AppendLine();
                 }
                 foreach (var typeDefinitionRealization in typeDefinition.Realizations)
@@ -36,6 +43,7 @@ namespace EyeOfBeholder.Uml
                     umlString.Append($"{realizationTypeName} {typeDefinitionRealization.Name} <|.. {typeDefinition.Name}")
                         .AppendLine();
                 }
+
             }
             umlString.Append("@enduml");
             return umlString.ToString();

@@ -51,7 +51,7 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var dependencies = new List<Dependency>
             {
-                new Dependency("Dependency", UmlEntityType.Enum)
+                new Dependency("Dependency", UmlEntityType.Enum, "relationName")
             };
             var dependentType = new TypeDefinition("DependendType", dependencies);
             return new List<TypeDefinition>
@@ -83,6 +83,22 @@ namespace EyeOfBeholder.Uml.Tests
                 new Attribute("packagePrivateAttribute", "dupa", VisibilityType.Package),
             };
             var typeDefinitions = new TypeDefinition("SomeArrayList", attributes);
+            return new List<TypeDefinition>
+            {
+                typeDefinitions
+            };
+        }
+
+        public static List<TypeDefinition> GetOperationsExample()
+        {
+            var operations = new List<Operation>
+            {
+                new Operation("publicOperation()", "Object[]", VisibilityType.Public),
+                new Operation("privateOperation()", "String", VisibilityType.Private),
+                new Operation("protectedOperation()", "int", VisibilityType.Protected),
+                new Operation("packagePrivateOperation()", "dupa", VisibilityType.Package),
+            };
+            var typeDefinitions = new TypeDefinition("SomeArrayList", operations);
             return new List<TypeDefinition>
             {
                 typeDefinitions

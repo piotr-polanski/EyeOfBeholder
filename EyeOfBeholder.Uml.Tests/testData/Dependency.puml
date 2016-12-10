@@ -1,5 +1,5 @@
 ﻿@startuml
 class DependendType {
 }
-enum Dependency <.. DependendType
+enum Dependency <.. DependendType : relationName
 @enduml

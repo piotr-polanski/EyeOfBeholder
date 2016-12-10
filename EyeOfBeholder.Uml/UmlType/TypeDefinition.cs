@@ -11,6 +11,8 @@ namespace EyeOfBeholder.Uml.UmlType
             Name = name;
             Associations = new List<Association>();
             Attributes = new List<Attribute>();
+            Operations = new List<Operation>();
+            Realizations = new List<Realization>();
         }
 
         public TypeDefinition(string name, List<Dependency> dependencies)
@@ -20,6 +22,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Associations = new List<Association>();
             Attributes = new List<Attribute>();
             Realizations = new List<Realization>();
+            Operations = new List<Operation>();
         }
 
         public TypeDefinition(string name, SuperClass superClass)
@@ -30,6 +33,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Attributes = new List<Attribute>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
+            Operations = new List<Operation>();
 
         }
         public TypeDefinition(string name, List<Attribute> attributes)
@@ -39,6 +43,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Associations = new List<Association>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
+            Operations = new List<Operation>();
         }
 
         public TypeDefinition(string name, SuperClass superClass, List<Attribute> attributes)
@@ -49,6 +54,7 @@ namespace EyeOfBeholder.Uml.UmlType
             Associations = new List<Association>();
             Realizations = new List<Realization>();
             Dependencies = new List<Dependency>();
+            Operations = new List<Operation>();
         }
         public TypeDefinition(
             string name,
@@ -76,16 +82,27 @@ namespace EyeOfBeholder.Uml.UmlType
             Associations = new List<Association>();
             Attributes = new List<Attribute>();
             Dependencies = new List<Dependency>();
+            Operations = new List<Operation>();
+        }
+
+        public TypeDefinition(string name, List<Operation> operations)
+        {
+            Name = name;
+            Operations = operations;
+            Associations = new List<Association>();
+            Attributes = new List<Attribute>();
+            Dependencies = new List<Dependency>();
+            Realizations = new List<Realization>();
         }
 
 
-        public List<Association> Associations { get; private set; }
-        public List<Attribute> Attributes { get; private set; }
-        public List<Realization> Realizations { get; private set; }
-        public SuperClass SuperClass { get; private set; }
-        public string Name { get; private set; }
-        public List<Dependency> Dependencies { get; private set; }
-        public List<Operation> Operations { get; set; }
-        public UmlEntityType Type { get; private set; }
+        public List<Association> Associations { get;}
+        public List<Attribute> Attributes { get;}
+        public List<Realization> Realizations { get;}
+        public SuperClass SuperClass { get;}
+        public string Name { get;}
+        public List<Dependency> Dependencies { get;}
+        public List<Operation> Operations { get;}
+        public UmlEntityType Type { get;}
     }
 }

@@ -1,0 +1,8 @@
+﻿@startuml
+class SomeArrayList {
++ publicOperation() : Object[]
+- privateOperation() : String
+# protectedOperation() : int
+~ packagePrivateOperation() : dupa
+}
+@enduml
