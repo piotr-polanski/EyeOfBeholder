@@ -152,6 +152,7 @@
     <Compile Include="CSharpUmlGeneratorTests.cs" />
     <Compile Include="PlantUmlGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntaxRootExtractorTests.cs" />
     <Compile Include="TypeDefinitionTestFixtures.cs" />
   </ItemGroup>
   <ItemGroup>
