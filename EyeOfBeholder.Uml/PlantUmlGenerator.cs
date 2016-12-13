@@ -6,7 +6,7 @@ namespace EyeOfBeholder.Uml
 {
     public class PlantUmlGenerator
     {
-        public string GenerateUmlString(List<TypeDefinition> typeDefinitions)
+        public string GenerateUmlString(List<UmlClass> typeDefinitions)
         {
             var umlString = new StringBuilder();
             umlString.Append("@startuml").AppendLine();
@@ -72,29 +72,29 @@ namespace EyeOfBeholder.Uml
             }
         }
 
-        private string GetEntityTypeName(UmlEntityType type)
+        private string GetEntityTypeName(UmlClassType type)
         {
             switch (type)
             {
-                case UmlEntityType.Interface:
+                case UmlClassType.Interface:
                     return "interface";
-                case UmlEntityType.Abstract:
+                case UmlClassType.Abstract:
                     return "abstract";
-                case UmlEntityType.Class:
+                case UmlClassType.Class:
                     return "class";
-                case UmlEntityType.Enum:
+                case UmlClassType.Enum:
                     return "enum";
                 default:
                     return "class";
             }
         }
 
-        private void AppendSuperClassIfExist(TypeDefinition typeDefinition, StringBuilder umlString)
+        private void AppendSuperClassIfExist(UmlClass umlClass, StringBuilder umlString)
         {
-            if (typeDefinition.SuperClass != null)
+            if (umlClass.SuperClass != null)
             {
-                var superClassTypeName = GetEntityTypeName(typeDefinition.SuperClass.Type);
-                umlString.Append($"{superClassTypeName} {typeDefinition.SuperClass.Name} <|-- {typeDefinition.Name}")
+                var superClassTypeName = GetEntityTypeName(umlClass.SuperClass.Type);
+                umlString.Append($"{superClassTypeName} {umlClass.SuperClass.Name} <|-- {umlClass.Name}")
                     .AppendLine();
             }
         }

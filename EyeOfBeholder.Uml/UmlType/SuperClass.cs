@@ -2,7 +2,7 @@
 {
     public class SuperClass
     {
-        public SuperClass(string name, UmlEntityType type)
+        public SuperClass(string name, UmlClassType type)
         {
             Name = name;
             Type = type;
@@ -14,6 +14,6 @@
         }
 
         public string Name { get; private set; }
-        public UmlEntityType Type { get; private set; }
+        public UmlClassType Type { get; private set; }
     }
 }

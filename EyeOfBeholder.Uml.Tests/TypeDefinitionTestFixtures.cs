@@ -6,9 +6,9 @@ namespace EyeOfBeholder.Uml.Tests
 {
     public static class TypeDefinitionTestFixtures
     {
-        public static List<TypeDefinition> GetTypeDefinitionsSimpleExample()
+        public static List<UmlClass> GetTypeDefinitionsSimpleExample()
         {
-            var someArrayListSuperClass = new SuperClass("SomeObject",UmlEntityType.Abstract);
+            var someArrayListSuperClass = new SuperClass("SomeObject",UmlClassType.Abstract);
 
             var someArrayListAttribute1 = new Attribute("elementData", "SomeObject", VisibilityType.Public);
             var someArrayListAttribute2 = new Attribute("someAttribute", "string", VisibilityType.Private);
@@ -17,14 +17,14 @@ namespace EyeOfBeholder.Uml.Tests
                 someArrayListAttribute1, someArrayListAttribute2
             };
 
-            var association1 = new Association("elementData", "SomeObject", VisibilityType.Package, UmlEntityType.Class);
-            var association2 = new Association("someAttribute", "string", VisibilityType.Package, UmlEntityType.Class);
+            var association1 = new Association("elementData", "SomeObject", UmlClassType.Class);
+            var association2 = new Association("someAttribute", "string", UmlClassType.Class);
             var associations = new List<Association>
             {
                 association1, association2
             };
 
-            var someArrayTypeDefinition = new TypeDefinition(
+            var someArrayTypeDefinition = new UmlClass(
                 "SomeArrayList", 
                 VisibilityType.Public, 
                 associations, 
@@ -39,7 +39,7 @@ namespace EyeOfBeholder.Uml.Tests
             {
                 someObjectMember1
             };
-            var someObjectTypeDefinition = new TypeDefinition(
+            var someObjectTypeDefinition = new UmlClass(
                 "SomeObject",
                 VisibilityType.Public, 
                 new List<Association>(),
@@ -49,7 +49,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Dependency>(),
                 someObjectOperations);
             
-            var someOtherObject = new TypeDefinition(
+            var someOtherObject = new UmlClass(
                 "string", 
                 VisibilityType.Package,
                 new List<Association>(),
@@ -60,7 +60,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Operation>());
 
 
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 someArrayTypeDefinition,
                 someObjectTypeDefinition,
@@ -68,10 +68,10 @@ namespace EyeOfBeholder.Uml.Tests
             };
         }
 
-        public static List<TypeDefinition> GetGeneralizationsExample()
+        public static List<UmlClass> GetGeneralizationsExample()
         {
-            var superType = new SuperClass("SuperType", UmlEntityType.Abstract);
-            var subType1 = new TypeDefinition(
+            var superType = new SuperClass("SuperType", UmlClassType.Abstract);
+            var subType1 = new UmlClass(
                 "SubType1",
                 VisibilityType.Public, 
                 new List<Association>(),
@@ -80,7 +80,7 @@ namespace EyeOfBeholder.Uml.Tests
                 superType,
                 new List<Dependency>(),
                 new List<Operation>());
-            var subType2 = new TypeDefinition(
+            var subType2 = new UmlClass(
                 "SubType2",
                 VisibilityType.Public, 
                 new List<Association>(),
@@ -90,19 +90,19 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Dependency>(),
                 new List<Operation>());
 
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 subType1, subType2
             };
         }
 
-        public static List<TypeDefinition> GetDependencyExample()
+        public static List<UmlClass> GetDependencyExample()
         {
             var dependencies = new List<Dependency>
             {
-                new Dependency("Dependency", UmlEntityType.Enum, "relationName")
+                new Dependency("Dependency", UmlClassType.Enum, "relationName")
             };
-            var dependentType = new TypeDefinition(
+            var dependentType = new UmlClass(
                 "DependendType",
                 VisibilityType.Public, 
                 new List<Association>(),
@@ -111,19 +111,19 @@ namespace EyeOfBeholder.Uml.Tests
                 null,
                 dependencies,
                 new List<Operation>());
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 dependentType
             };
         }
 
-        public static List<TypeDefinition> GetRealizationExample()
+        public static List<UmlClass> GetRealizationExample()
         {
             var realizations = new List<Realization>
             {
-                new Realization("Interface", UmlEntityType.Interface)
+                new Realization("Interface", UmlClassType.Interface)
             };
-            var interfaceRealization = new TypeDefinition(
+            var interfaceRealization = new UmlClass(
                 "InterfaceRealization",
                 VisibilityType.Public, 
                 new List<Association>(), 
@@ -133,13 +133,13 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Dependency>(),
                 new List<Operation>());
 
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 interfaceRealization
             };
         }
 
-        public static List<TypeDefinition> GetAttributesExample()
+        public static List<UmlClass> GetAttributesExample()
         {
             var attributes = new List<Attribute>
             {
@@ -148,7 +148,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new Attribute("protectedAttribute", "int", VisibilityType.Protected),
                 new Attribute("packagePrivateAttribute", "dupa", VisibilityType.Package),
             };
-            var typeDefinitions = new TypeDefinition(
+            var typeDefinitions = new UmlClass(
                 "SomeArrayList", 
                 VisibilityType.Public, 
                 new List<Association>(), 
@@ -158,13 +158,13 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Dependency>(),
                 new List<Operation>());
 
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 typeDefinitions
             };
         }
 
-        public static List<TypeDefinition> GetOperationsExample()
+        public static List<UmlClass> GetOperationsExample()
         {
             var operations = new List<Operation>
             {
@@ -173,7 +173,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new Operation("protectedOperation()", "int", VisibilityType.Protected),
                 new Operation("packagePrivateOperation()", "dupa", VisibilityType.Package),
             };
-            var typeDefinitions = new TypeDefinition(
+            var typeDefinitions = new UmlClass(
                 "SomeArrayList", 
                 VisibilityType.Public, 
                 new List<Association>(), 
@@ -182,25 +182,25 @@ namespace EyeOfBeholder.Uml.Tests
                 null,
                 new List<Dependency>(), 
                 operations);
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
                 typeDefinitions
             };
         }
 
-        public static List<TypeDefinition> GetAssociationsExample()
+        public static List<UmlClass> GetAssociationsExample()
         {
             var association1 = new Association("associationAttribute1Name",
-                "Association1", VisibilityType.Public, UmlEntityType.Class);
+                "Association1", UmlClassType.Class);
             var association2 = new Association("associationAttribute2Name",
-                "Association2", VisibilityType.Private, UmlEntityType.Class);
+                "Association2", UmlClassType.Class);
             var associations = new List<Association>
             {
                 association1, association2
             };
-            return new List<TypeDefinition>
+            return new List<UmlClass>
             {
-                new TypeDefinition(
+                new UmlClass(
                     "Class", 
                     VisibilityType.Public, 
                     associations,

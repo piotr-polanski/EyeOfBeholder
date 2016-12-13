@@ -10,7 +10,7 @@ namespace EyeOfBeholder.Uml.Tests
     public class PlantUmlGeneratorTests
     {
         [Theory, MemberData("GenerateUmlStringTestData")]
-        public void GenerateUmlString_Given_ValidTypeDefinitions_Returns_ValidPlantUmlString(List<TypeDefinition> typeDefinitions, string expectedUmlString )
+        public void GenerateUmlString_Given_ValidTypeDefinitions_Returns_ValidPlantUmlString(List<UmlClass> typeDefinitions, string expectedUmlString )
         {
             //arrange
             var plantUmlGenerator = new PlantUmlGenerator();
