@@ -36,7 +36,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new object[] {TypeDefinitionTestFixtures.GetAssociationsExample(), File.ReadAllText(@"testData\Association.puml")},
             };
         }
-        
+
         private string ConvertNewLineCode(string text, string newline)
         {
             var reg = new System.Text.RegularExpressions.Regex("\r\n|\r|\n");

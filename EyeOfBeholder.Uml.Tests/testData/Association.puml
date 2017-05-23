@@ -1,6 +1,8 @@
 ﻿@startuml
-class Class --> Association1 : associationAttribute1Name
-class Class --> Association2 : associationAttribute2Name
+class Class
+Class --> Association1 : associationAttribute1Name
+class Class
+Class --> Association2 : associationAttribute2Name
 class Class {
 }
 @enduml

@@ -1,6 +1,8 @@
 ﻿@startuml
-class SomeArrayList --> SomeObject : elementData
-class SomeArrayList --> string : someAttribute
+class SomeArrayList
+SomeArrayList --> SomeObject : elementData
+class SomeArrayList
+SomeArrayList --> string : someAttribute
 class SomeArrayList {
 + elementData : SomeObject
 - someAttribute : string
@@ -8,7 +10,8 @@ class SomeArrayList {
 class SomeObject {
 + equals() : bool
 }
-abstract SomeObject <|-- string
+abstract SomeObject
+SomeObject <|-- string
 class string {
 }
 @enduml

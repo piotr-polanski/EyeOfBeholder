@@ -32,8 +32,8 @@ namespace EyeOfBeholder.Uml
             foreach (var typeDefinitionRealization in typeDefinition.Realizations)
             {
                 var realizationTypeName = GetEntityTypeName(typeDefinitionRealization.Type);
-                umlString.Append($"{realizationTypeName} {typeDefinitionRealization.Name} <|.. {typeDefinition.Name}")
-                    .AppendLine();
+                umlString.AppendLine($"{realizationTypeName} {typeDefinitionRealization.Name}");
+                umlString.AppendLine($"{typeDefinitionRealization.Name} <|.. {typeDefinition.Name}");
             }
         }
 
@@ -43,9 +43,9 @@ namespace EyeOfBeholder.Uml
             foreach (var typeDefinitionDependency in typeDefinition.Dependencies)
             {
                 var dependencyTypeName = GetEntityTypeName(typeDefinitionDependency.Type);
-                umlString.Append(
-                        $"{dependencyTypeName} {typeDefinitionDependency.ClassName} <.. {typeDefinition.Name} : {typeDefinitionDependency.RelationName}")
-                    .AppendLine();
+                umlString.AppendLine($"{dependencyTypeName} {typeDefinitionDependency.ClassName}");
+                umlString.AppendLine(
+                    $"{typeDefinitionDependency.ClassName} <.. {typeDefinition.Name} : {typeDefinitionDependency.RelationName}");
             }
         }
 
@@ -54,9 +54,8 @@ namespace EyeOfBeholder.Uml
             foreach (var typeDefinitionOperation in typeDefinition.Operations)
             {
                 var operationVisibility = GetAttributeVisibilityFrom(typeDefinitionOperation.VisibilityType);
-                umlString.Append($"{operationVisibility} {typeDefinitionOperation.Name} : " +
-                                 $"{typeDefinitionOperation.ReturnTypeName}")
-                    .AppendLine();
+                umlString.AppendLine($"{operationVisibility} {typeDefinitionOperation.Name} : " +
+                                 $"{typeDefinitionOperation.ReturnTypeName}");
             }
         }
 
@@ -65,17 +64,16 @@ namespace EyeOfBeholder.Uml
             foreach (var typeDefinitionAttribute in typeDefinition.Attributes)
             {
                 var attributeVisibility = GetAttributeVisibilityFrom(typeDefinitionAttribute.VisibilityType);
-                umlString.Append($"{attributeVisibility} {typeDefinitionAttribute.Name} : " +
-                                 $"{typeDefinitionAttribute.TypeName}")
-                    .AppendLine();
+                umlString.AppendLine($"{attributeVisibility} {typeDefinitionAttribute.Name} : " +
+                                     $"{typeDefinitionAttribute.TypeName}");
             }
         }
 
         private void AppendTypeDefinitionName(UmlClass typeDefinition)
         {
             var typeDefinitionType = GetEntityTypeName(typeDefinition.Type);
-            umlString.Append(
-                $"{typeDefinitionType} {typeDefinition.Name} {{").AppendLine();
+            umlString.AppendLine(
+                $"{typeDefinitionType} {typeDefinition.Name} {{");
         }
 
         private void AppendAssociations(UmlClass typeDefinition)
@@ -83,9 +81,9 @@ namespace EyeOfBeholder.Uml
             foreach (var association in typeDefinition.Associations)
             {
                 var associationTypeName = GetEntityTypeName(association.Type);
-                umlString.Append(
-                        $"{associationTypeName} {typeDefinition.Name} --> {association.BaseTypeName} : {association.AttributeName}")
-                    .AppendLine();
+                umlString.AppendLine($"{associationTypeName} {typeDefinition.Name}");
+                umlString.AppendLine(
+                    $"{typeDefinition.Name} --> {association.BaseTypeName} : {association.AttributeName}");
             }
         }
 
@@ -128,8 +126,8 @@ namespace EyeOfBeholder.Uml
             if (umlClass.SuperClass != null)
             {
                 var superClassTypeName = GetEntityTypeName(umlClass.SuperClass.Type);
-                umlString.Append($"{superClassTypeName} {umlClass.SuperClass.Name} <|-- {umlClass.Name}")
-                    .AppendLine();
+                umlString.AppendLine($"{superClassTypeName} {umlClass.SuperClass.Name}");
+                umlString.AppendLine($"{umlClass.SuperClass.Name} <|-- {umlClass.Name}");
             }
         }
     }
