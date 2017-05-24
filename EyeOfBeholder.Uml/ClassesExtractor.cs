@@ -4,11 +4,41 @@ using EyeOfBeholder.Uml.UmlType;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.MSBuild;
 
 namespace EyeOfBeholder.Uml
 {
     public class ClassesExtractor
     {
+
+        public List<UmlClass> GetFromSolution(string pathToSolution)
+        {
+            var classes = new List<UmlClass>();
+
+            var workspace = MSBuildWorkspace.Create();
+            var solution = workspace.OpenSolutionAsync(pathToSolution).Result;
+            var workspace2 = MSBuildWorkspace.Create();
+            var pro = workspace2.OpenProjectAsync(solution.Projects.First().FilePath).Result;
+
+
+            foreach (var projectId in solution.ProjectIds)
+            {
+                var project = solution.GetProject(projectId);
+
+
+            }
+
+            foreach (var document in solution.Projects.SelectMany(project => project.Documents))
+            {
+                var rootNode = document.GetSyntaxRootAsync().Result;
+                var semanticModel = document.GetSemanticModelAsync().Result;
+
+                var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
+                classes.AddRange(GetClassess(myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
+            }
+
+            return classes;
+        }
         public List<UmlClass> GetFrom(string codeString)
         {
             var classes = new List<UmlClass>();
@@ -26,8 +56,14 @@ namespace EyeOfBeholder.Uml
 
             var myClasses = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
+            classes.AddRange(GetClassess(myClasses, model, syntaxRoot));
 
+            return classes;
+        }
 
+        private IEnumerable<UmlClass> GetClassess(IEnumerable<ClassDeclarationSyntax> myClasses, SemanticModel model, CompilationUnitSyntax syntaxRoot)
+        {
+            List<UmlClass> classes = new List<UmlClass>();
             foreach (var classDeclarationSyntax in myClasses)
             {
                 var classSymbol = model.GetDeclaredSymbol(classDeclarationSyntax);
@@ -61,35 +97,35 @@ namespace EyeOfBeholder.Uml
                     superClass,
                     deps,
                     operations
-                    );
+                );
 
                 classes.Add(umlClass);
             }
 
-            var @interfaces = syntaxRoot.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
-            foreach (var @interface in @interfaces)
+            var interfaces = syntaxRoot.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
+            foreach (var @interface in interfaces)
             {
-                var @interfaceSymbol = model.GetDeclaredSymbol(@interface);
-                var visibility = @interfaceSymbol.DeclaredAccessibility;
+                var interfaceSymbol = model.GetDeclaredSymbol(@interface);
+                var visibility = interfaceSymbol.DeclaredAccessibility;
                 var visibilityType = GetVisibilityType(visibility);
                 var name = @interface.Identifier.ValueText;
 
                 var attributes = new List<Attribute>();
                 var associations = new List<Association>();
-                AddAttributesAndAssociations(@interfaceSymbol, attributes, associations);
+                AddAttributesAndAssociations(interfaceSymbol, attributes, associations);
 
                 var realizations = new List<Realization>();
-                AddRealizations(@interfaceSymbol, realizations);
+                AddRealizations(interfaceSymbol, realizations);
 
                 var operations = new List<Operation>();
-                AddOperations(@interfaceSymbol, operations);
+                AddOperations(interfaceSymbol, operations);
 
                 SuperClass superClass = null;
-                superClass = SetSuperClass(@interfaceSymbol, superClass);
+                superClass = SetSuperClass(interfaceSymbol, superClass);
 
 
                 var deps = new List<Dependency>();
-                deps = GetDependecies(@interfaceSymbol, deps);
+                deps = GetDependecies(interfaceSymbol, deps);
 
                 var umlClass = new UmlClass(
                     name,
@@ -100,11 +136,10 @@ namespace EyeOfBeholder.Uml
                     superClass,
                     deps,
                     operations
-                    );
+                );
 
                 classes.Add(umlClass);
             }
-
             return classes;
         }
 

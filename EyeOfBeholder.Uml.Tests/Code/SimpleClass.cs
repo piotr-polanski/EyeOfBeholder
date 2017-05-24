@@ -17,9 +17,8 @@
         }
     }
 
-    public class SomeBaseType
-    {
-    }
+	public class SomeBaseType {
+	}
 
     public interface ISomeInterface
     {

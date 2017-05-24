@@ -20,5 +20,21 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
             //assert
             Assert.NotEmpty(umlString);
         }
+
+        [Fact]
+        public void PlantUmlGenerator_Given_ValidSlnPath_Should_GeneratePlantUmlFile()
+        {
+            //arrange
+            var plantUmlGenerator = new PlantUmlGenerator();
+            var classesExtractor= new ClassesExtractor();
+            var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+
+            //act
+            var umlClasses = classesExtractor.GetFromSolution(slnPath);
+            var umlString = plantUmlGenerator.GenerateUmlString(umlClasses);
+
+            //assert
+            Assert.NotEmpty(umlString);
+        }
     }
 }
