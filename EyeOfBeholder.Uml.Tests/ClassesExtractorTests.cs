@@ -47,15 +47,11 @@ namespace EyeOfBeholder.Uml.Tests
             Assert.Equal(VisibilityType.Public, secondAttribute.VisibilityType);
 
 
-            Assert.Equal(2, simpleClass.Associations.Count);
+            Assert.Equal(1, simpleClass.Associations.Count);
             var firstAssociation = simpleClass.Associations.First();
             Assert.Equal("SomeBaseType", firstAssociation.BaseTypeName);
             Assert.Equal("name", firstAssociation.AttributeName);
             Assert.Equal(UmlClassType.Class, firstAssociation.Type);
-            var secondAssociation = simpleClass.Associations.Last();
-            Assert.Equal("Number", secondAssociation.AttributeName);
-            Assert.Equal("Int32", secondAssociation.BaseTypeName);
-            Assert.Equal(UmlClassType.Class, secondAssociation.Type);
 
             Assert.Equal(1, simpleClass.Dependencies.Count);
             var firstDependency = simpleClass.Dependencies.First();

@@ -54,7 +54,7 @@ namespace EyeOfBeholder.Uml
             foreach (var typeDefinitionOperation in typeDefinition.Operations)
             {
                 var operationVisibility = GetAttributeVisibilityFrom(typeDefinitionOperation.VisibilityType);
-                umlString.AppendLine($"{operationVisibility} {typeDefinitionOperation.Name} : " +
+                umlString.AppendLine($"{operationVisibility} {typeDefinitionOperation.Name}() : " +
                                  $"{typeDefinitionOperation.ReturnTypeName}");
             }
         }

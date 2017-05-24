@@ -9,14 +9,14 @@ namespace EyeOfBeholder.Uml
 {
     public class ClassesExtractor
     {
-        public IEnumerable<UmlClass> GetFrom(string codeString)
+        public List<UmlClass> GetFrom(string codeString)
         {
             var classes = new List<UmlClass>();
             var tree = CSharpSyntaxTree.ParseText(codeString);
             tree.GetRoot();
             var syntaxRoot = (CompilationUnitSyntax)tree.GetRoot();
 
-            var compilation = CSharpCompilation.Create("HelloWorld")
+            var compilation = CSharpCompilation.Create("SimpleClass")
                 .AddReferences(
                     MetadataReference.CreateFromFile(
                         typeof(object).Assembly.Location))
@@ -188,8 +188,11 @@ namespace EyeOfBeholder.Uml
                 var attribute = new Attribute(attributeName, attributeType, vis);
                 attributes.Add(attribute);
 
-                var association = new Association(attributeName, attributeType, UmlClassType.Class);
-                associations.Add(association);
+                if (!field.Type.ContainingNamespace.Name.StartsWith("System"))
+                {
+                    var association = new Association(attributeName, attributeType, UmlClassType.Class);
+                    associations.Add(association);
+                }
             }
 
             var props = classSymbol.GetMembers().OfType<IPropertySymbol>();
@@ -203,8 +206,11 @@ namespace EyeOfBeholder.Uml
                 var prop = new Attribute(propertyName, propertyType, visType);
                 attributes.Add(prop);
 
-                var propAss = new Association(propertyName, propertyType, UmlClassType.Class);
-                associations.Add(propAss);
+                if (!property.Type.ContainingNamespace.Name.StartsWith("System"))
+                {
+                    var propAss = new Association(propertyName, propertyType, UmlClassType.Class);
+                    associations.Add(propAss);
+                }
             }
         }
 

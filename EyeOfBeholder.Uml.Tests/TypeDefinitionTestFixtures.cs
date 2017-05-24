@@ -25,38 +25,38 @@ namespace EyeOfBeholder.Uml.Tests
             };
 
             var someArrayTypeDefinition = new UmlClass(
-                "SomeArrayList", 
-                VisibilityType.Public, 
-                associations, 
-                someArrayListAttributes, 
-                new List<Realization>(), 
+                "SomeArrayList",
+                VisibilityType.Public,
+                associations,
+                someArrayListAttributes,
+                new List<Realization>(),
                 null,
-                new List<Dependency>(), 
+                new List<Dependency>(),
                 new List<Operation>());
 
-            var someObjectMember1 = new Operation("equals()", "bool", VisibilityType.Public);
+            var someObjectMember1 = new Operation("equals", "bool", VisibilityType.Public);
             var someObjectOperations = new List<Operation>
             {
                 someObjectMember1
             };
             var someObjectTypeDefinition = new UmlClass(
                 "SomeObject",
-                VisibilityType.Public, 
+                VisibilityType.Public,
                 new List<Association>(),
                 new List<Attribute>(),
                 new List<Realization>(),
                 null,
                 new List<Dependency>(),
                 someObjectOperations);
-            
+
             var someOtherObject = new UmlClass(
-                "string", 
+                "string",
                 VisibilityType.Package,
                 new List<Association>(),
-                new List<Attribute>(), 
+                new List<Attribute>(),
                 new List<Realization>(),
                 someArrayListSuperClass,
-                new List<Dependency>(), 
+                new List<Dependency>(),
                 new List<Operation>());
 
 
@@ -73,7 +73,7 @@ namespace EyeOfBeholder.Uml.Tests
             var superType = new SuperClass("SuperType", UmlClassType.Abstract);
             var subType1 = new UmlClass(
                 "SubType1",
-                VisibilityType.Public, 
+                VisibilityType.Public,
                 new List<Association>(),
                 new List<Attribute>(),
                 new List<Realization>(),
@@ -82,7 +82,7 @@ namespace EyeOfBeholder.Uml.Tests
                 new List<Operation>());
             var subType2 = new UmlClass(
                 "SubType2",
-                VisibilityType.Public, 
+                VisibilityType.Public,
                 new List<Association>(),
                 new List<Attribute>(),
                 new List<Realization>(),
@@ -104,10 +104,10 @@ namespace EyeOfBeholder.Uml.Tests
             };
             var dependentType = new UmlClass(
                 "DependendType",
-                VisibilityType.Public, 
+                VisibilityType.Public,
                 new List<Association>(),
-                new List<Attribute>(),  
-                new List<Realization>(), 
+                new List<Attribute>(),
+                new List<Realization>(),
                 null,
                 dependencies,
                 new List<Operation>());
@@ -125,9 +125,9 @@ namespace EyeOfBeholder.Uml.Tests
             };
             var interfaceRealization = new UmlClass(
                 "InterfaceRealization",
-                VisibilityType.Public, 
-                new List<Association>(), 
-                new List<Attribute>(), 
+                VisibilityType.Public,
+                new List<Association>(),
+                new List<Attribute>(),
                 realizations,
                 null,
                 new List<Dependency>(),
@@ -149,9 +149,9 @@ namespace EyeOfBeholder.Uml.Tests
                 new Attribute("packagePrivateAttribute", "dupa", VisibilityType.Package),
             };
             var typeDefinitions = new UmlClass(
-                "SomeArrayList", 
-                VisibilityType.Public, 
-                new List<Association>(), 
+                "SomeArrayList",
+                VisibilityType.Public,
+                new List<Association>(),
                 attributes,
                 new List<Realization>(),
                 null,
@@ -168,19 +168,19 @@ namespace EyeOfBeholder.Uml.Tests
         {
             var operations = new List<Operation>
             {
-                new Operation("publicOperation()", "Object[]", VisibilityType.Public),
-                new Operation("privateOperation()", "String", VisibilityType.Private),
-                new Operation("protectedOperation()", "int", VisibilityType.Protected),
-                new Operation("packagePrivateOperation()", "dupa", VisibilityType.Package),
+                new Operation("publicOperation", "Object[]", VisibilityType.Public),
+                new Operation("privateOperation", "String", VisibilityType.Private),
+                new Operation("protectedOperation", "int", VisibilityType.Protected),
+                new Operation("packagePrivateOperation", "dupa", VisibilityType.Package),
             };
             var typeDefinitions = new UmlClass(
-                "SomeArrayList", 
-                VisibilityType.Public, 
-                new List<Association>(), 
-                new List<Attribute>(), 
-                new List<Realization>(), 
+                "SomeArrayList",
+                VisibilityType.Public,
+                new List<Association>(),
+                new List<Attribute>(),
+                new List<Realization>(),
                 null,
-                new List<Dependency>(), 
+                new List<Dependency>(),
                 operations);
             return new List<UmlClass>
             {
@@ -201,13 +201,13 @@ namespace EyeOfBeholder.Uml.Tests
             return new List<UmlClass>
             {
                 new UmlClass(
-                    "Class", 
-                    VisibilityType.Public, 
+                    "Class",
+                    VisibilityType.Public,
                     associations,
-                    new List<Attribute>(), 
-                    new List<Realization>(), 
+                    new List<Attribute>(),
+                    new List<Realization>(),
                     null,
-                    new List<Dependency>(), 
+                    new List<Dependency>(),
                     new List<Operation>())
             };
         }
