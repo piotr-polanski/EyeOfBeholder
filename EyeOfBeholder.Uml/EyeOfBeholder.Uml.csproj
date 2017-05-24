@@ -160,7 +160,7 @@
   <ItemGroup>
     <Compile Include="PlantUmlGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SyntaxRootsExtractor.cs" />
+    <Compile Include="ClassesExtractor.cs" />
     <Compile Include="UmlType\Association.cs" />
     <Compile Include="UmlType\Dependency.cs" />
     <Compile Include="UmlType\Attribute.cs" />
