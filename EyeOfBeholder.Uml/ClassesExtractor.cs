@@ -17,16 +17,6 @@ namespace EyeOfBeholder.Uml
 
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(pathToSolution).Result;
-            var workspace2 = MSBuildWorkspace.Create();
-            var pro = workspace2.OpenProjectAsync(solution.Projects.First().FilePath).Result;
-
-
-            foreach (var projectId in solution.ProjectIds)
-            {
-                var project = solution.GetProject(projectId);
-
-
-            }
 
             foreach (var document in solution.Projects.SelectMany(project => project.Documents))
             {
@@ -35,6 +25,21 @@ namespace EyeOfBeholder.Uml
 
                 var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
                 classes.AddRange(GetClassess(myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
+
+				var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
+				foreach (var @enum in enums)
+				{
+					var e = semanticModel.GetDeclaredSymbol(@enum);
+					var visibiltiy = GetVisibilityType(e.DeclaredAccessibility);
+					var members = @enum.Members;
+					var atts = new List<Attribute>();
+					foreach (var member in members)
+					{
+						atts.Add(new Attribute(member.Identifier.ValueText));
+					}
+					classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts, new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
+				}
+
             }
 
             return classes;
@@ -73,7 +78,7 @@ namespace EyeOfBeholder.Uml
 
                 var attributes = new List<Attribute>();
                 var associations = new List<Association>();
-                AddAttributesAndAssociations(classSymbol, attributes, associations);
+                AddAttributesAndAssociations(classSymbol, attributes, associations, model);
 
                 var realizations = new List<Realization>();
                 AddRealizations(classSymbol, realizations);
@@ -112,7 +117,7 @@ namespace EyeOfBeholder.Uml
 
                 var attributes = new List<Attribute>();
                 var associations = new List<Association>();
-                AddAttributesAndAssociations(interfaceSymbol, attributes, associations);
+                AddAttributesAndAssociations(interfaceSymbol, attributes, associations, model);
 
                 var realizations = new List<Realization>();
                 AddRealizations(interfaceSymbol, realizations);
@@ -140,6 +145,8 @@ namespace EyeOfBeholder.Uml
 
                 classes.Add(umlClass);
             }
+
+
             return classes;
         }
 
@@ -156,6 +163,10 @@ namespace EyeOfBeholder.Uml
                     {
                         var depName = parameter.Name;
                         var depTypeName = parameter.Type.Name;
+						if (!((INamedTypeSymbol) parameter.Type).TypeArguments.IsEmpty)
+						{
+							depTypeName = ((INamedTypeSymbol)parameter.Type).TypeArguments[0].Name;
+						}
                         var depType = UmlClassType.Class;
                         if (parameter.Type.IsReferenceType)
                         {
@@ -190,7 +201,7 @@ namespace EyeOfBeholder.Uml
                             && m.MethodKind != MethodKind.PropertyGet && m.MethodKind != MethodKind.PropertySet);
             foreach (var method in methods)
             {
-                //var op = model.GetDeclaredSymbol(method);
+                //var op = semanticModel.GetDeclaredSymbol(method);
                 var opname = method.Name;
                 var opVisibility = method.DeclaredAccessibility;
                 var returnType = method.ReturnType.Name;
@@ -210,12 +221,12 @@ namespace EyeOfBeholder.Uml
             }
         }
 
-        private void AddAttributesAndAssociations(INamedTypeSymbol classSymbol, List<Attribute> attributes, List<Association> associations)
+        private void AddAttributesAndAssociations(INamedTypeSymbol classSymbol, List<Attribute> attributes, List<Association> associations, SemanticModel semanticModel)
         {
             var fids = classSymbol.GetMembers().OfType<IFieldSymbol>().Where(f => !f.IsImplicitlyDeclared);
             foreach (var field in fids)
             {
-                //var f = model.GetDeclaredSymbol(field);
+                //var f = semanticModel.GetDeclaredSymbol(field);
                 var attributeName = field.Name;
                 var attributeType = field.Type.Name; //.Declaration.DescendantNodes().OfType<IdentifierNameSyntax>().First()
                 var attributeVisibility = field.DeclaredAccessibility;
@@ -233,9 +244,13 @@ namespace EyeOfBeholder.Uml
             var props = classSymbol.GetMembers().OfType<IPropertySymbol>();
             foreach (var property in props)
             {
-                //var pr = model.GetDeclaredSymbol(property);
-                var propertyName = property.Name;
-                var propertyType = property.Type.Name;
+				var propertyName = property.Name;
+	            var propertyType = property.Type.Name;
+				//generics
+	            if (!((INamedTypeSymbol) property.Type).TypeArguments.IsEmpty)
+	            {
+					propertyType = ((INamedTypeSymbol)property.Type).TypeArguments[0].Name;
+	            }
                 var propVisibility = property.DeclaredAccessibility;
                 var visType = GetVisibilityType(propVisibility);
                 var prop = new Attribute(propertyName, propertyType, visType);
