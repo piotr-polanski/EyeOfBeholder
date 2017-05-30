@@ -40,5 +40,22 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
             //assert
             Assert.NotEmpty(umlString);
         }
-    }
+
+	    [Fact]
+	    public void NomnomlStringGenerator_Given_ValidSlnPath_Should_GenerateNomnomlFile()
+	    {
+		    //arrange
+		    var umlStringGenerator = new NomnomlStringGenerator();
+		    var diagramGenerator = new DiagramGenerator(umlStringGenerator);
+		    var classesExtractor = new ClassesExtractor();
+		    var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+
+		    //act
+		    var umlClasses = classesExtractor.GetFromSolution(slnPath);
+		    var umlString = diagramGenerator.GenerateUmlString(umlClasses);
+
+		    //assert
+		    Assert.NotEmpty(umlString);
+	    }
+	}
 }
