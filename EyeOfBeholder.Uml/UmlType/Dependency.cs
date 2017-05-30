@@ -2,14 +2,14 @@
 {
     public class Dependency
     {
-        public Dependency(string className, UmlClassType type, string relationName)
+        public Dependency(string typeName, UmlClassType type, string relationName)
         {
-            ClassName = className;
+            TypeName = typeName;
             Type = type;
             RelationName = relationName;
         }
 
-        public string ClassName { get;}
+        public string TypeName { get;}
         public UmlClassType Type { get; }
         public string RelationName { get; }
     }

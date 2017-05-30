@@ -3,15 +3,15 @@
     public class Operation
     {
         public string Name { get; private set; }
-        public string ReturnTypeName { get; private set; }
+        public string ReturnType { get; private set; }
         public VisibilityType VisibilityType { get; private set; }
 
         public Operation(string name, 
-            string returnTypeName, 
+            string returnType, 
             VisibilityType visibilityType)
         {
             Name = name;
-            ReturnTypeName = returnTypeName;
+            ReturnType = returnType;
             VisibilityType = visibilityType;
         }
     }

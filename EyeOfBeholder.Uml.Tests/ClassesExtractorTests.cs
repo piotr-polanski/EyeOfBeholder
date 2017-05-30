@@ -39,30 +39,30 @@ namespace EyeOfBeholder.Uml.Tests
             Assert.Equal(2, simpleClass.Attributes.Count);
             var firstAttribute = simpleClass.Attributes.First();
             Assert.Equal("name", firstAttribute.Name);
-            Assert.Equal("SomeBaseType", firstAttribute.TypeName);
+            Assert.Equal("SomeBaseType", firstAttribute.Type);
             Assert.Equal(VisibilityType.Private, firstAttribute.VisibilityType);
             var secondAttribute = simpleClass.Attributes.Last();
             Assert.Equal("Number", secondAttribute.Name);
-            Assert.Equal("Int32", secondAttribute.TypeName);
+            Assert.Equal("Int32", secondAttribute.Type);
             Assert.Equal(VisibilityType.Public, secondAttribute.VisibilityType);
 
 
             Assert.Equal(1, simpleClass.Associations.Count);
             var firstAssociation = simpleClass.Associations.First();
-            Assert.Equal("SomeBaseType", firstAssociation.BaseTypeName);
-            Assert.Equal("name", firstAssociation.AttributeName);
-            Assert.Equal(UmlClassType.Class, firstAssociation.Type);
+            Assert.Equal("SomeBaseType", firstAssociation.TypeName);
+            Assert.Equal("name", firstAssociation.Name);
+            Assert.Equal(UmlClassType.Class, firstAssociation.UmlClassType);
 
             Assert.Equal(1, simpleClass.Dependencies.Count);
             var firstDependency = simpleClass.Dependencies.First();
-            Assert.Equal("SomeBaseType", firstDependency.ClassName);
+            Assert.Equal("SomeBaseType", firstDependency.TypeName);
             Assert.Equal("newName", firstDependency.RelationName);
             Assert.Equal(UmlClassType.Class, firstDependency.Type);
 
             Assert.Equal(1, simpleClass.Operations.Count);
             var firstOperation = simpleClass.Operations.First();
             Assert.Equal("SomeMethod", firstOperation.Name);
-            Assert.Equal("Boolean", firstOperation.ReturnTypeName);
+            Assert.Equal("Boolean", firstOperation.ReturnType);
             Assert.Equal(VisibilityType.Public, firstOperation.VisibilityType);
 
             Assert.Equal(1, simpleClass.Realizations.Count);

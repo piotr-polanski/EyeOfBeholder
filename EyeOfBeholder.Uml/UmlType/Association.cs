@@ -2,16 +2,16 @@
 {
     public class Association
     {
-        public string AttributeName { get;}
-        public string BaseTypeName { get;}
-        public UmlClassType Type { get;}
+        public string Name { get;}
+        public string TypeName { get;}
+        public UmlClassType UmlClassType { get;}
 
-        public Association(string attributeName, string baseTypeName, 
-             UmlClassType type)
+        public Association(string associationName, string associationTypeName, 
+             UmlClassType umlClassUmlClassType)
         {
-            AttributeName = attributeName;
-            BaseTypeName = baseTypeName;
-            Type = type;
+            Name = associationName;
+            TypeName = associationTypeName;
+            UmlClassType = umlClassUmlClassType;
         }
     }
 }

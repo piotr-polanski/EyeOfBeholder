@@ -4,11 +4,11 @@
     {
         public Attribute(
             string name, 
-            string attributeTypeName, 
+            string returnType, 
             VisibilityType visibilityType)
         {
             Name = name;
-            TypeName = attributeTypeName;
+            Type = returnType;
             VisibilityType = visibilityType;
         }
 
@@ -17,7 +17,7 @@
             Name = name;
         }
         public string Name { get; private set; }
-        public string TypeName { get; private set; }
+        public string Type { get; private set; }
         public VisibilityType VisibilityType { get; private set; }
     }
 }
