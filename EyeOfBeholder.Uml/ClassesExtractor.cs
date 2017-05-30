@@ -84,7 +84,7 @@ namespace EyeOfBeholder.Uml
                 AddRealizations(classSymbol, realizations);
 
                 var operations = new List<Operation>();
-                AddOperations(classSymbol, operations);
+                AddOperations(classSymbol, operations, associations);
 
                 SuperClass superClass = null;
                 superClass = SetSuperClass(classSymbol, superClass);
@@ -123,7 +123,7 @@ namespace EyeOfBeholder.Uml
                 AddRealizations(interfaceSymbol, realizations);
 
                 var operations = new List<Operation>();
-                AddOperations(interfaceSymbol, operations);
+                AddOperations(interfaceSymbol, operations, associations);
 
                 SuperClass superClass = null;
                 superClass = SetSuperClass(interfaceSymbol, superClass);
@@ -194,7 +194,7 @@ namespace EyeOfBeholder.Uml
             return superClass;
         }
 
-        private void AddOperations(INamedTypeSymbol classSymbol, List<Operation> operations)
+        private void AddOperations(INamedTypeSymbol classSymbol, List<Operation> operations, List<Association> associations)
         {
             var methods = classSymbol.GetMembers().OfType<IMethodSymbol>()
                 .Where(m => m.MethodKind != MethodKind.Constructor
@@ -205,11 +205,30 @@ namespace EyeOfBeholder.Uml
                 var opname = method.Name;
                 var opVisibility = method.DeclaredAccessibility;
                 var returnType = method.ReturnType.Name;
-                    //rawOperation.DescendantNodes().OfType<PredefinedTypeSyntax>().First().Keyword.ValueText;
-                var opvisibility = GetVisibilityType(opVisibility);
+
+	            //generics
+	            if (!((INamedTypeSymbol) method.ReturnType).TypeArguments.IsEmpty)
+	            {
+		            returnType = ((INamedTypeSymbol) method.ReturnType).TypeArguments[0].Name;
+		            if (!((INamedTypeSymbol) method.ReturnType).ContainingNamespace.Name.StartsWith("System"))
+		            {
+			            var propAss = new Association(opname, returnType, UmlClassType.Class);
+			            associations.Add(propAss);
+		            }
+	            }
+	            else
+	            {
+					if (!method.ReturnType.ContainingNamespace.Name.StartsWith("System"))
+					{
+						var propAss = new Association(opname, returnType, UmlClassType.Class);
+						associations.Add(propAss);
+					}
+	            }
+				//rawOperation.DescendantNodes().OfType<PredefinedTypeSyntax>().First().Keyword.ValueText;
+				var opvisibility = GetVisibilityType(opVisibility);
                 var operation = new Operation(opname, returnType, opvisibility);
                 operations.Add(operation);
-            }
+			}
         }
 
         private static void AddRealizations(INamedTypeSymbol classSymbol, List<Realization> realizations)
@@ -234,7 +253,8 @@ namespace EyeOfBeholder.Uml
                 var attribute = new Attribute(attributeName, attributeType, vis);
                 attributes.Add(attribute);
 
-                if (!field.Type.ContainingNamespace.Name.StartsWith("System"))
+                if (!field.Type.ContainingNamespace.Name.StartsWith("System")
+					&& field.Type.ContainingNamespace.Name != string.Empty)
                 {
                     var association = new Association(attributeName, attributeType, UmlClassType.Class);
                     associations.Add(association);

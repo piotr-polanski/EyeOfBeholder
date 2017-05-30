@@ -47,11 +47,16 @@ namespace EyeOfBeholder.Uml.Tests
             Assert.Equal(VisibilityType.Public, secondAttribute.VisibilityType);
 
 
-            Assert.Equal(1, simpleClass.Associations.Count);
+            Assert.Equal(2, simpleClass.Associations.Count);
             var firstAssociation = simpleClass.Associations.First();
             Assert.Equal("SomeBaseType", firstAssociation.TypeName);
             Assert.Equal("name", firstAssociation.Name);
             Assert.Equal(UmlClassType.Class, firstAssociation.UmlClassType);
+
+            var secondAssociation = simpleClass.Associations.Last();
+            Assert.Equal("ISomeInterface", secondAssociation.TypeName);
+            Assert.Equal("GenericMethod", secondAssociation.Name);
+            Assert.Equal(UmlClassType.Class, secondAssociation.UmlClassType);
 
             Assert.Equal(1, simpleClass.Dependencies.Count);
             var firstDependency = simpleClass.Dependencies.First();
@@ -59,11 +64,16 @@ namespace EyeOfBeholder.Uml.Tests
             Assert.Equal("newName", firstDependency.RelationName);
             Assert.Equal(UmlClassType.Class, firstDependency.Type);
 
-            Assert.Equal(1, simpleClass.Operations.Count);
+            Assert.Equal(2, simpleClass.Operations.Count);
             var firstOperation = simpleClass.Operations.First();
             Assert.Equal("SomeMethod", firstOperation.Name);
             Assert.Equal("Boolean", firstOperation.ReturnType);
             Assert.Equal(VisibilityType.Public, firstOperation.VisibilityType);
+
+	        var secondOperation = simpleClass.Operations.Last();
+			Assert.Equal("GenericMethod", secondOperation.Name);
+            Assert.Equal("ISomeInterface", secondOperation.ReturnType);
+            Assert.Equal(VisibilityType.Public, secondOperation.VisibilityType);
 
             Assert.Equal(1, simpleClass.Realizations.Count);
             var firstRealization = simpleClass.Realizations.First();

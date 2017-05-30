@@ -1,4 +1,6 @@
-﻿namespace EyeOfBeholder.Uml.Tests.Code
+﻿using System.Collections.Generic;
+
+namespace EyeOfBeholder.Uml.Tests.Code
 {
     public class SimpleClass : SomeBaseType, ISomeInterface
     {
@@ -10,6 +12,11 @@
         {
             return true;
         }
+
+	    public IEnumerable<ISomeInterface> GenericMethod()
+	    {
+		    return new List<ISomeInterface>();
+	    }
 
         public SimpleClass(SomeBaseType newName)
         {
