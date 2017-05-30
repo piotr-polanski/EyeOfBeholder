@@ -29,7 +29,8 @@ namespace EyeOfBeholder.Uml.Tests.UmlStringGeneratorTests
 			var expectedString = @"class TypeDefinition{
 + attribute : 
 + operation() : 
-}";
+}
+";
 
 			//act
 			var typeDefinitionString = plantUmlStringGenerator.GetTypeDefinitionString(umlClass);

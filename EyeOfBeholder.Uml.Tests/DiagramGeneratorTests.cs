@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Text;
 using EyeOfBeholder.Uml.UmlType;
 using FakeItEasy;
 using Ploeh.AutoFixture;
 using Xunit;
-using Xunit.Sdk;
-using Attribute = EyeOfBeholder.Uml.UmlType.Attribute;
 
 namespace EyeOfBeholder.Uml.Tests
 {
