@@ -1,21 +1,22 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using EyeOfBeholder.Uml.UmlType;
 using Xunit;
 
 namespace EyeOfBeholder.Uml.Tests
 {
-    public class ClassesExtractorTests
+    public class UmlEntitiesExtractorTests
     {
         [Fact]
         public void GetFrom_Given_validCSharpCode_Return_UmlClasses()
         {
             //arrange
-            var classesExtractor= new ClassesExtractor();
+            var umlEntitiesExtractor= new UmlEntitiesExtractor();
             var codeString = File.ReadAllText(@"Code\SimpleClass.cs");
 
             //act
-            var umlClasses = classesExtractor.GetFrom(codeString);
+            var umlClasses = umlEntitiesExtractor.GetFrom(codeString);
 
             //assert
             Assert.NotEmpty(umlClasses);
@@ -25,11 +26,11 @@ namespace EyeOfBeholder.Uml.Tests
         public void GetFrom_Given_SimpleClass_Return_UmlClassRepresentation()
         {
             //arrange
-            var classesExtractor= new ClassesExtractor();
+            var umlEntitiesExtractor= new UmlEntitiesExtractor();
             var codeString = File.ReadAllText(@"Code\SimpleClass.cs");
 
             //act
-            var umlClasses = classesExtractor.GetFrom(codeString);
+            var umlClasses = umlEntitiesExtractor.GetFrom(codeString);
 
             //assert
             Assert.Equal(3, umlClasses.Count());
@@ -103,5 +104,43 @@ namespace EyeOfBeholder.Uml.Tests
             Assert.Null(@interface.SuperClass);
 
         }
+
+	    [Fact]
+	    public void GetFromSolution_Given_ValidSolutionPath_Returns_UmlClasses()
+	    {
+		    //arrange
+			var umlEntitiesExtractor = new UmlEntitiesExtractor();
+		    var solutionPath = @"../../../EyeOfBeholder.Uml/EyeOfBeholder.Uml.sln";
+			var projectNames = new List<string>()
+			{
+				"EyeOfBeholder.Uml", "EyeOfBeholder.Uml.Tests"
+			};
+
+
+		    //act
+		    var umlClasses = umlEntitiesExtractor.GetFromSolution(solutionPath, projectNames);
+
+		    //assert
+			Assert.NotEmpty(umlClasses);
+	    }
+
+	    [Fact]
+	    public void GetFromSolution_Given_ProjectNames_Returns_UmlClassesOnlyFromThoseProjects()
+	    {
+		    //arrange
+			var umlEntitiesExtractor = new UmlEntitiesExtractor();
+		    var solutionPath = @"../../../EyeOfBeholder.Uml/EyeOfBeholder.Uml.sln";
+			var projectNames = new List<string>()
+			{
+				"EyeOfBeholder.Uml"
+			};
+
+		    //act
+		    var umlContainers = umlEntitiesExtractor.GetFromSolution(solutionPath, projectNames);
+
+		    //assert
+			Assert.NotEmpty(umlContainers);
+			Assert.Equal(1, umlContainers.Count);
+	    }
     }
 }

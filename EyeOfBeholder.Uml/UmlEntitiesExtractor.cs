@@ -1,48 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EyeOfBeholder.Uml.UmlType;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
+using Attribute = EyeOfBeholder.Uml.UmlType.Attribute;
 
 namespace EyeOfBeholder.Uml
 {
-    public class ClassesExtractor
+    public class UmlEntitiesExtractor
     {
 
-        public List<UmlClass> GetFromSolution(string pathToSolution)
+        public List<UmlContainer> GetFromSolution(string pathToSolution, List<string> projectNames)
         {
-            var classes = new List<UmlClass>();
+			var umlContainers = new List<UmlContainer>();
 
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(pathToSolution).Result;
+			workspace.WorkspaceFailed += (o, e) =>
+			{
+				var ee = e;
+			};
 
-            foreach (var document in solution.Projects.SelectMany(project => project.Documents))
-            {
-                var rootNode = document.GetSyntaxRootAsync().Result;
-                var semanticModel = document.GetSemanticModelAsync().Result;
-
-                var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
-                classes.AddRange(GetClassess(myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
-
-				var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
-				foreach (var @enum in enums)
+	        foreach (var project in solution.Projects)
+	        {
+		        if (!projectNames.Contains(project.Name))
+		        {
+			        continue;
+		        }
+				var umlContainer = new UmlContainer();
+				var classes = new List<UmlClass>();
+				foreach (var document in project.Documents)
 				{
-					var e = semanticModel.GetDeclaredSymbol(@enum);
-					var visibiltiy = GetVisibilityType(e.DeclaredAccessibility);
-					var members = @enum.Members;
-					var atts = new List<Attribute>();
-					foreach (var member in members)
+					var rootNode = document.GetSyntaxRootAsync().Result;
+					var semanticModel = document.GetSemanticModelAsync().Result;
+
+					var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
+					classes.AddRange(GetClassess(myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
+
+					var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
+					foreach (var @enum in enums)
 					{
-						atts.Add(new Attribute(member.Identifier.ValueText));
+						var e = semanticModel.GetDeclaredSymbol(@enum);
+						var visibiltiy = GetVisibilityType(e.DeclaredAccessibility);
+						var members = @enum.Members;
+						var atts = new List<Attribute>();
+						foreach (var member in members)
+						{
+							atts.Add(new Attribute(member.Identifier.ValueText));
+						}
+						classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts, new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
 					}
-					classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts, new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
+
 				}
-
-            }
-
-            return classes;
+				umlContainer.UmlClasses = classes;
+				umlContainers.Add(umlContainer);
+		        
+	        }
+            return umlContainers;
         }
         public List<UmlClass> GetFrom(string codeString)
         {
@@ -207,23 +224,23 @@ namespace EyeOfBeholder.Uml
                 var returnType = method.ReturnType.Name;
 
 	            //generics
-	            if (!((INamedTypeSymbol) method.ReturnType).TypeArguments.IsEmpty)
-	            {
-		            returnType = ((INamedTypeSymbol) method.ReturnType).TypeArguments[0].Name;
-		            if (!((INamedTypeSymbol) method.ReturnType).ContainingNamespace.Name.StartsWith("System"))
-		            {
-			            var propAss = new Association(opname, returnType, UmlClassType.Class);
-			            associations.Add(propAss);
-		            }
-	            }
-	            else
-	            {
-					if (!method.ReturnType.ContainingNamespace.Name.StartsWith("System"))
-					{
-						var propAss = new Association(opname, returnType, UmlClassType.Class);
-						associations.Add(propAss);
-					}
-	            }
+	    //        if (method.ReturnType.TypeKind != TypeKind.TypeParameter && !((INamedTypeSymbol) method.ReturnType).TypeArguments.IsEmpty)
+	    //        {
+		   //         returnType = ((INamedTypeSymbol) method.ReturnType).TypeArguments[0].Name;
+		   //         if (!((INamedTypeSymbol) method.ReturnType).ContainingNamespace.Name.StartsWith("System"))
+		   //         {
+			  //          var propAss = new Association(opname, returnType, UmlClassType.Class);
+			  //          //associations.Add(propAss);
+		   //         }
+	    //        }
+	    //        else
+	    //        {
+					//if (!method.ReturnType.ContainingNamespace.Name.StartsWith("System"))
+					//{
+					//	var propAss = new Association(opname, returnType, UmlClassType.Class);
+					//	//associations.Add(propAss);
+					//}
+	    //        }
 				//rawOperation.DescendantNodes().OfType<PredefinedTypeSyntax>().First().Keyword.ValueText;
 				var opvisibility = GetVisibilityType(opVisibility);
                 var operation = new Operation(opname, returnType, opvisibility);
@@ -253,7 +270,7 @@ namespace EyeOfBeholder.Uml
                 var attribute = new Attribute(attributeName, attributeType, vis);
                 attributes.Add(attribute);
 
-                if (!field.Type.ContainingNamespace.Name.StartsWith("System")
+                if (field.Type.ContainingNamespace != null && !field.Type.ContainingNamespace.Name.StartsWith("System")
 					&& field.Type.ContainingNamespace.Name != string.Empty)
                 {
                     var association = new Association(attributeName, attributeType, UmlClassType.Class);
@@ -267,16 +284,25 @@ namespace EyeOfBeholder.Uml
 				var propertyName = property.Name;
 	            var propertyType = property.Type.Name;
 				//generics
-	            if (!((INamedTypeSymbol) property.Type).TypeArguments.IsEmpty)
+	            try
 	            {
-					propertyType = ((INamedTypeSymbol)property.Type).TypeArguments[0].Name;
+					if (!((INamedTypeSymbol) property.Type).TypeArguments.IsEmpty)
+					{
+						propertyType = ((INamedTypeSymbol)property.Type).TypeArguments[0].Name;
+					}
+
+	            }
+	            catch (Exception e)
+	            {
+					//TODO log exception
+		            //throw;
 	            }
                 var propVisibility = property.DeclaredAccessibility;
                 var visType = GetVisibilityType(propVisibility);
                 var prop = new Attribute(propertyName, propertyType, visType);
                 attributes.Add(prop);
 
-                if (!property.Type.ContainingNamespace.Name.StartsWith("System"))
+                if (property.Type.ContainingNamespace != null && !property.Type.ContainingNamespace.Name.StartsWith("System"))
                 {
                     var propAss = new Association(propertyName, propertyType, UmlClassType.Class);
                     associations.Add(propAss);

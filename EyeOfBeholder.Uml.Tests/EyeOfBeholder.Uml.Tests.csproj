@@ -244,7 +244,7 @@
     <Compile Include="IntegrationTests\EyeOfBeholderIntegrationTests.cs" />
     <Compile Include="DiagramGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClassesExtractorTests.cs" />
+    <Compile Include="UmlEntitiesExtractorTests.cs" />
     <Compile Include="TypeDefinitionTestFixtures.cs" />
     <Compile Include="UmlStringGeneratorTests\NomnomlStringGeneratorTests.cs" />
     <Compile Include="UmlStringGeneratorTests\PlantUmlStringGeneratorTests.cs" />

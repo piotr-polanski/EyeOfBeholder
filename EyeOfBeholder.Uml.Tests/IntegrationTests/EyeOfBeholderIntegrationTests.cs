@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using EyeOfBeholder.Uml.UmlStringGenerators;
 using FakeItEasy;
 using Xunit;
@@ -13,11 +15,11 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
             //arrange
 			var umlStringGenerator = new PlantUmlStringGenerator();
             var diagramGenerator = new DiagramGenerator(umlStringGenerator);
-            var classesExtractor= new ClassesExtractor();
+            var umlEntitiesExtractor= new UmlEntitiesExtractor();
             var codeString = File.ReadAllText(@"Code\SimpleClass.cs");
 
             //act
-            var umlClasses = classesExtractor.GetFrom(codeString);
+            var umlClasses = umlEntitiesExtractor.GetFrom(codeString);
             var umlString = diagramGenerator.GenerateUmlString(umlClasses);
 
             //assert
@@ -30,12 +32,17 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
             //arrange
 			var umlStringGenerator = new PlantUmlStringGenerator();
             var diagramGenerator = new DiagramGenerator(umlStringGenerator);
-            var classesExtractor= new ClassesExtractor();
-            var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+            var umlEntitiesExtractor = new UmlEntitiesExtractor();
+            //var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+		    var slnPath = @"C:\Sources\Repos\b2b_platform\B2BPlatform.sln";
+			var projectsToExtract = new List<string>()
+			{
+				"B2BPlatform.Orders"
+			};
 
             //act
-            var umlClasses = classesExtractor.GetFromSolution(slnPath);
-            var umlString = diagramGenerator.GenerateUmlString(umlClasses);
+            var umlContainers = umlEntitiesExtractor.GetFromSolution(slnPath, projectsToExtract);
+            var umlString = diagramGenerator.GenerateUmlString(umlContainers.SelectMany(c => c.UmlClasses).ToList());
 
             //assert
             Assert.NotEmpty(umlString);
@@ -47,12 +54,17 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
 		    //arrange
 		    var umlStringGenerator = new NomnomlStringGenerator();
 		    var diagramGenerator = new DiagramGenerator(umlStringGenerator);
-		    var classesExtractor = new ClassesExtractor();
-		    var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+		    var umlEntitiesExtractor = new UmlEntitiesExtractor();
+		    //var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+		    var slnPath = @"C:\Sources\Repos\b2b_platform\B2BPlatform.sln";
+			var projectsToExtract = new List<string>()
+			{
+				"B2BPlatform.Orders"
+			};
 
 		    //act
-		    var umlClasses = classesExtractor.GetFromSolution(slnPath);
-		    var umlString = diagramGenerator.GenerateUmlString(umlClasses);
+		    var umlContainers = umlEntitiesExtractor.GetFromSolution(slnPath, projectsToExtract);
+		    var umlString = diagramGenerator.GenerateUmlString(umlContainers.SelectMany(c => c.UmlClasses).ToList());
 
 		    //assert
 		    Assert.NotEmpty(umlString);
