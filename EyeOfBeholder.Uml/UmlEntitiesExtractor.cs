@@ -273,8 +273,11 @@ namespace EyeOfBeholder.Uml
                 if (field.Type.ContainingNamespace != null && !field.Type.ContainingNamespace.Name.StartsWith("System")
 					&& field.Type.ContainingNamespace.Name != string.Empty)
                 {
-                    var association = new Association(attributeName, attributeType, UmlClassType.Class);
-                    associations.Add(association);
+	                if (!associations.Any(a => a.TypeName == attributeType))
+	                {
+						var association = new Association(attributeName, attributeType, UmlClassType.Class);
+						associations.Add(association);
+	                }
                 }
             }
 
@@ -304,8 +307,11 @@ namespace EyeOfBeholder.Uml
 
                 if (property.Type.ContainingNamespace != null && !property.Type.ContainingNamespace.Name.StartsWith("System"))
                 {
-                    var propAss = new Association(propertyName, propertyType, UmlClassType.Class);
-                    associations.Add(propAss);
+	                if (!associations.Any(a => a.TypeName == propertyType))
+	                {
+		                var propAss = new Association(propertyName, propertyType, UmlClassType.Class);
+		                associations.Add(propAss);
+	                }
                 }
             }
         }
