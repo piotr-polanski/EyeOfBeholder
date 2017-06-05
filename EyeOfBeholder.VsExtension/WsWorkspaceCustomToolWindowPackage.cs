@@ -11,6 +11,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -67,6 +69,9 @@ namespace EyeOfBeholder.VsExtension
         /// </summary>
         protected override void Initialize()
         {
+            var componentModel = (IComponentModel) this.GetService(typeof(SComponentModel));
+            var workspace = componentModel.GetService<VisualStudioWorkspace>();
+
             WsWorkspaceCustomToolWindowCommand.Initialize(this);
             base.Initialize();
         }
