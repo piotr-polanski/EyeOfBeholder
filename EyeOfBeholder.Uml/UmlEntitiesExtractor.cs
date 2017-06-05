@@ -28,8 +28,8 @@ namespace EyeOfBeholder.Uml
 	        {
 		        if (!projectNames.Contains(project.Name))
 		        {
-			        continue;
-		        }
+					continue;
+				}
 				var umlContainer = new UmlContainer();
 				var classes = new List<UmlClass>();
 				foreach (var document in project.Documents)
@@ -38,7 +38,7 @@ namespace EyeOfBeholder.Uml
 					var semanticModel = document.GetSemanticModelAsync().Result;
 
 					var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
-					classes.AddRange(GetClassess(myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
+					classes.AddRange(GetClassess(project.Name, myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
 
 					var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
 					foreach (var @enum in enums)
@@ -53,6 +53,8 @@ namespace EyeOfBeholder.Uml
 						}
 						classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts, new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
 					}
+					var structs = rootNode.DescendantNodes().OfType<StructDeclarationSyntax>();
+					classes.AddRange(GetClassess(project.Name, structs, semanticModel, (CompilationUnitSyntax)rootNode));
 
 				}
 				umlContainer.UmlClasses = classes;
@@ -78,24 +80,28 @@ namespace EyeOfBeholder.Uml
 
             var myClasses = syntaxRoot.DescendantNodes().OfType<ClassDeclarationSyntax>();
 
-            classes.AddRange(GetClassess(myClasses, model, syntaxRoot));
+            classes.AddRange(GetClassess("",myClasses, model, syntaxRoot));
 
             return classes;
         }
 
-        private IEnumerable<UmlClass> GetClassess(IEnumerable<ClassDeclarationSyntax> myClasses, SemanticModel model, CompilationUnitSyntax syntaxRoot)
+        private IEnumerable<UmlClass> GetClassess(string projectName, IEnumerable<TypeDeclarationSyntax> myClasses, SemanticModel model, CompilationUnitSyntax syntaxRoot)
         {
             List<UmlClass> classes = new List<UmlClass>();
             foreach (var classDeclarationSyntax in myClasses)
             {
                 var classSymbol = model.GetDeclaredSymbol(classDeclarationSyntax);
+	            if (classSymbol.ContainingAssembly.Name != projectName)
+	            {
+		            continue;
+	            }
                 var visibility = classSymbol.DeclaredAccessibility;
                 var visibilityType = GetVisibilityType(visibility);
                 var name = classDeclarationSyntax.Identifier.ValueText;
 
                 var attributes = new List<Attribute>();
                 var associations = new List<Association>();
-                AddAttributesAndAssociations(classSymbol, attributes, associations, model);
+                AddAttributesAndAssociations(projectName, classSymbol, attributes, associations, model);
 
                 var realizations = new List<Realization>();
                 AddRealizations(classSymbol, realizations);
@@ -134,7 +140,7 @@ namespace EyeOfBeholder.Uml
 
                 var attributes = new List<Attribute>();
                 var associations = new List<Association>();
-                AddAttributesAndAssociations(interfaceSymbol, attributes, associations, model);
+                AddAttributesAndAssociations(projectName, interfaceSymbol, attributes, associations, model);
 
                 var realizations = new List<Realization>();
                 AddRealizations(interfaceSymbol, realizations);
@@ -257,7 +263,7 @@ namespace EyeOfBeholder.Uml
             }
         }
 
-        private void AddAttributesAndAssociations(INamedTypeSymbol classSymbol, List<Attribute> attributes, List<Association> associations, SemanticModel semanticModel)
+        private void AddAttributesAndAssociations(string projectName, INamedTypeSymbol classSymbol, List<Attribute> attributes, List<Association> associations, SemanticModel semanticModel)
         {
             var fids = classSymbol.GetMembers().OfType<IFieldSymbol>().Where(f => !f.IsImplicitlyDeclared);
             foreach (var field in fids)
@@ -305,7 +311,8 @@ namespace EyeOfBeholder.Uml
                 var prop = new Attribute(propertyName, propertyType, visType);
                 attributes.Add(prop);
 
-                if (property.Type.ContainingNamespace != null && !property.Type.ContainingNamespace.Name.StartsWith("System"))
+                if (property.Type.ContainingNamespace != null && !property.Type.ContainingNamespace.Name.StartsWith("System")
+					)
                 {
 	                if (!associations.Any(a => a.TypeName == propertyType))
 	                {
