@@ -21,12 +21,12 @@ namespace EyeOfBeholder.Uml
 
             foreach (var umlClass in umlClasses)
             {
-				//umlString.Append(_umlStringGenerator.GetAssociations(umlClass));
-				//umlString.Append(_umlStringGenerator.GetSuperClass(umlClass));
-	            umlString.Append(_umlStringGenerator.GetTypeDefinitionString(umlClass));
+				umlString.Append(_umlStringGenerator.GetAssociations(umlClass));
+				umlString.Append(_umlStringGenerator.GetSuperClass(umlClass));
+				umlString.Append(_umlStringGenerator.GetTypeDefinitionString(umlClass));
 				umlString.Append(_umlStringGenerator.GetDependencies(umlClass));
-				//umlString.Append(_umlStringGenerator.GetRealizations(umlClass));
-            }
+				umlString.Append(_umlStringGenerator.GetRealizations(umlClass));
+			}
 
             umlString.Append(_umlStringGenerator.EndString);
             return umlString.ToString();

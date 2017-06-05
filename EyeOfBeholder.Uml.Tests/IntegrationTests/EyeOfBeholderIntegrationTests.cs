@@ -33,11 +33,12 @@ namespace EyeOfBeholder.Uml.Tests.IntegrationTests
 			var umlStringGenerator = new PlantUmlStringGenerator();
             var diagramGenerator = new DiagramGenerator(umlStringGenerator);
             var umlEntitiesExtractor = new UmlEntitiesExtractor();
-            //var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
-		    var slnPath = @"C:\Sources\Repos\b2b_platform\B2BPlatform.sln";
+			var slnPath = @"..\..\..\EyeOfBeholder.Uml\EyeOfBeholder.Uml.sln";
+			//var slnPath = @"C:\Sources\Repos\b2b_platform\B2BPlatform.sln";
 			var projectsToExtract = new List<string>()
 			{
-				"B2BPlatform.Orders"
+				//"B2BPlatform.Orders"
+				"EyeOfBeholder.Uml"
 			};
 
             //act
