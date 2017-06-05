@@ -55,10 +55,49 @@ namespace EyeOfBeholder.Uml
 					}
 					var structs = rootNode.DescendantNodes().OfType<StructDeclarationSyntax>();
 					classes.AddRange(GetClassess(project.Name, structs, semanticModel, (CompilationUnitSyntax)rootNode));
+					var interfaces = rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
+					foreach (var @interface in interfaces)
+					{
+						var interfaceSymbol = semanticModel.GetDeclaredSymbol(@interface);
+						var visibility = interfaceSymbol.DeclaredAccessibility;
+						var visibilityType = GetVisibilityType(visibility);
+						var name = @interface.Identifier.ValueText;
 
+						var attributes = new List<Attribute>();
+						var associations = new List<Association>();
+						AddAttributesAndAssociations(project.Name, interfaceSymbol, attributes, associations, semanticModel);
+
+						var realizations = new List<Realization>();
+						AddRealizations(interfaceSymbol, realizations);
+
+						var operations = new List<Operation>();
+						AddOperations(interfaceSymbol, operations, associations);
+
+						SuperClass superClass = null;
+						superClass = SetSuperClass(interfaceSymbol, superClass);
+
+
+						var deps = new List<Dependency>();
+						deps = GetDependecies(interfaceSymbol, deps);
+
+						var umlClass = new UmlClass(
+							name,
+							visibilityType,
+							associations,
+							attributes,
+							realizations,
+							superClass,
+							deps,
+							operations
+						);
+
+						classes.Add(umlClass);
+					}
 				}
+
 				umlContainer.UmlClasses = classes;
 				umlContainers.Add(umlContainer);
+
 		        
 	        }
             return umlContainers;
@@ -130,44 +169,7 @@ namespace EyeOfBeholder.Uml
                 classes.Add(umlClass);
             }
 
-            var interfaces = syntaxRoot.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
-            foreach (var @interface in interfaces)
-            {
-                var interfaceSymbol = model.GetDeclaredSymbol(@interface);
-                var visibility = interfaceSymbol.DeclaredAccessibility;
-                var visibilityType = GetVisibilityType(visibility);
-                var name = @interface.Identifier.ValueText;
-
-                var attributes = new List<Attribute>();
-                var associations = new List<Association>();
-                AddAttributesAndAssociations(projectName, interfaceSymbol, attributes, associations, model);
-
-                var realizations = new List<Realization>();
-                AddRealizations(interfaceSymbol, realizations);
-
-                var operations = new List<Operation>();
-                AddOperations(interfaceSymbol, operations, associations);
-
-                SuperClass superClass = null;
-                superClass = SetSuperClass(interfaceSymbol, superClass);
-
-
-                var deps = new List<Dependency>();
-                deps = GetDependecies(interfaceSymbol, deps);
-
-                var umlClass = new UmlClass(
-                    name,
-                    visibilityType,
-                    associations,
-                    attributes,
-                    realizations,
-                    superClass,
-                    deps,
-                    operations
-                );
-
-                classes.Add(umlClass);
-            }
+            
 
 
             return classes;
