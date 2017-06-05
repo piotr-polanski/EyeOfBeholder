@@ -140,7 +140,7 @@ namespace EyeOfBeholder.Uml.Tests
 
 		    //assert
 			Assert.NotEmpty(umlContainers);
-			Assert.Equal(1, umlContainers.Count);
+			Assert.Equal(1, 38/*umlContainers.Count*/);
 	    }
     }
 }
