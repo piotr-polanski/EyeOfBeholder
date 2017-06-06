@@ -305,6 +305,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="plantuml.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\WsWorkspaceCustomToolWindowCommand.png" />
     <Content Include="Resources\WsWorkspaceCustomToolWindowPackage.ico" />
     <VSCTCompile Include="WsWorkspaceCustomToolWindowPackage.vsct">

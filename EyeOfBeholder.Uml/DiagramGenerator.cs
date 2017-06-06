@@ -14,7 +14,7 @@ namespace EyeOfBeholder.Uml
 	    {
 		    _umlStringGenerator = umlStringGenerator;
 	    }
-        public string GenerateUmlString(List<UmlClass> umlClasses)
+        public string GenerateUmlString(IEnumerable<UmlClass> umlClasses)
         {
             umlString.Append(_umlStringGenerator.StartString);
 

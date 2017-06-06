@@ -12,10 +12,13 @@ namespace EyeOfBeholder.Uml
 {
     public class UmlEntitiesExtractor
     {
-
-        public List<UmlContainer> GetFromSolution(string pathToSolution, List<string> projectNames)
+        public IEnumerable<UmlContainer> GetFrom(IEnumerable<Project> projects, IEnumerable<string> projectNamesToExtract)
         {
-			var umlContainers = new List<UmlContainer>();
+            return ExtractUmlEntities(projects, projectNamesToExtract);
+        }
+
+        public IEnumerable<UmlContainer> GetFromSolution(string pathToSolution, List<string> projectNames)
+        {
 
             var workspace = MSBuildWorkspace.Create();
             var solution = workspace.OpenSolutionAsync(pathToSolution).Result;
@@ -24,84 +27,90 @@ namespace EyeOfBeholder.Uml
 				var ee = e;
 			};
 
-	        foreach (var project in solution.Projects)
-	        {
-		        if (!projectNames.Contains(project.Name))
-		        {
-					continue;
-				}
-				var umlContainer = new UmlContainer();
-				var classes = new List<UmlClass>();
-				foreach (var document in project.Documents)
-				{
-					var rootNode = document.GetSyntaxRootAsync().Result;
-					var semanticModel = document.GetSemanticModelAsync().Result;
+	        return ExtractUmlEntities(solution.Projects, projectNames);
+        }
 
-					var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
-					classes.AddRange(GetClassess(project.Name, myClasses, semanticModel, (CompilationUnitSyntax)rootNode));
+        private IEnumerable<UmlContainer> ExtractUmlEntities(IEnumerable<Project> projects, IEnumerable<string> projectNamesToExtract)
+        {
+            List<UmlContainer> umlContainers = new List<UmlContainer>();
+            foreach (var project in projects)
+            {
+                if (!projectNamesToExtract.Contains(project.Name))
+                {
+                    continue;
+                }
+                var umlContainer = new UmlContainer();
+                var classes = new List<UmlClass>();
+                foreach (var document in project.Documents)
+                {
+                    var rootNode = document.GetSyntaxRootAsync().Result;
+                    var semanticModel = document.GetSemanticModelAsync().Result;
 
-					var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
-					foreach (var @enum in enums)
-					{
-						var e = semanticModel.GetDeclaredSymbol(@enum);
-						var visibiltiy = GetVisibilityType(e.DeclaredAccessibility);
-						var members = @enum.Members;
-						var atts = new List<Attribute>();
-						foreach (var member in members)
-						{
-							atts.Add(new Attribute(member.Identifier.ValueText));
-						}
-						classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts, new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
-					}
-					var structs = rootNode.DescendantNodes().OfType<StructDeclarationSyntax>();
-					classes.AddRange(GetClassess(project.Name, structs, semanticModel, (CompilationUnitSyntax)rootNode));
-					var interfaces = rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
-					foreach (var @interface in interfaces)
-					{
-						var interfaceSymbol = semanticModel.GetDeclaredSymbol(@interface);
-						var visibility = interfaceSymbol.DeclaredAccessibility;
-						var visibilityType = GetVisibilityType(visibility);
-						var name = @interface.Identifier.ValueText;
+                    var myClasses = rootNode.DescendantNodes().OfType<ClassDeclarationSyntax>();
+                    classes.AddRange(GetClassess(project.Name, myClasses, semanticModel, (CompilationUnitSyntax) rootNode));
 
-						var attributes = new List<Attribute>();
-						var associations = new List<Association>();
-						AddAttributesAndAssociations(project.Name, interfaceSymbol, attributes, associations, semanticModel);
+                    var enums = rootNode.DescendantNodes().OfType<EnumDeclarationSyntax>();
+                    foreach (var @enum in enums)
+                    {
+                        var e = semanticModel.GetDeclaredSymbol(@enum);
+                        var visibiltiy = GetVisibilityType(e.DeclaredAccessibility);
+                        var members = @enum.Members;
+                        var atts = new List<Attribute>();
+                        foreach (var member in members)
+                        {
+                            atts.Add(new Attribute(member.Identifier.ValueText));
+                        }
+                        classes.Add(new UmlClass(@enum.Identifier.ValueText, visibiltiy, new List<Association>(), atts,
+                            new List<Realization>(), null, new List<Dependency>(), new List<Operation>()));
+                    }
+                    var structs = rootNode.DescendantNodes().OfType<StructDeclarationSyntax>();
+                    classes.AddRange(GetClassess(project.Name, structs, semanticModel, (CompilationUnitSyntax) rootNode));
+                    var interfaces = rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>();
+                    foreach (var @interface in interfaces)
+                    {
+                        var interfaceSymbol = semanticModel.GetDeclaredSymbol(@interface);
+                        var visibility = interfaceSymbol.DeclaredAccessibility;
+                        var visibilityType = GetVisibilityType(visibility);
+                        var name = @interface.Identifier.ValueText;
 
-						var realizations = new List<Realization>();
-						AddRealizations(interfaceSymbol, realizations);
+                        var attributes = new List<Attribute>();
+                        var associations = new List<Association>();
+                        AddAttributesAndAssociations(project.Name, interfaceSymbol, attributes, associations, semanticModel);
 
-						var operations = new List<Operation>();
-						AddOperations(interfaceSymbol, operations, associations);
+                        var realizations = new List<Realization>();
+                        AddRealizations(interfaceSymbol, realizations);
 
-						SuperClass superClass = null;
-						superClass = SetSuperClass(interfaceSymbol, superClass);
+                        var operations = new List<Operation>();
+                        AddOperations(interfaceSymbol, operations, associations);
+
+                        SuperClass superClass = null;
+                        superClass = SetSuperClass(interfaceSymbol, superClass);
 
 
-						var deps = new List<Dependency>();
-						deps = GetDependecies(interfaceSymbol, deps);
+                        var deps = new List<Dependency>();
+                        deps = GetDependecies(interfaceSymbol, deps);
 
-						var umlClass = new UmlClass(
-							name,
-							visibilityType,
-							associations,
-							attributes,
-							realizations,
-							superClass,
-							deps,
-							operations
-						);
+                        var umlClass = new UmlClass(
+                            name,
+                            visibilityType,
+                            associations,
+                            attributes,
+                            realizations,
+                            superClass,
+                            deps,
+                            operations
+                        );
 
-						classes.Add(umlClass);
-					}
-				}
+                        classes.Add(umlClass);
+                    }
+                }
 
-				umlContainer.UmlClasses = classes;
-				umlContainers.Add(umlContainer);
-
-		        
-	        }
+                umlContainer.UmlClasses = classes;
+                umlContainers.Add(umlContainer);
+            }
             return umlContainers;
         }
+
         public List<UmlClass> GetFrom(string codeString)
         {
             var classes = new List<UmlClass>();

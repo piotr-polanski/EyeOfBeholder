@@ -5,7 +5,7 @@ namespace EyeOfBeholder.Uml.UmlStringGenerators
 {
 	public class PlantUmlStringGenerator : IUmlStringGenerator 
 	{
-		public string StartString { get; } = new StringBuilder().AppendLine("@startuml").ToString();
+		public string StartString { get; } = new StringBuilder().AppendLine("@startuml").AppendLine("skinparam linetype ortho").ToString();
 		public string EndString { get; } = new StringBuilder().Append("@enduml").ToString();
 
 		public string GetTypeDefinitionString(UmlClass umlClass)

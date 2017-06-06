@@ -5,11 +5,17 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using EyeOfBeholder.Uml;
+using EyeOfBeholder.Uml.UmlStringGenerators;
+using EyeOfBeholder.Uml.UmlType;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
@@ -50,6 +56,7 @@ namespace EyeOfBeholder.VsExtension
         /// </summary>
         public const string PackageGuidString = "909045be-c5b8-4fa5-8b65-c2c8cb73bd63";
 
+        private VisualStudioWorkspace workspace;
         /// <summary>
         /// Initializes a new instance of the <see cref="WsWorkspaceCustomToolWindow"/> class.
         /// </summary>
@@ -70,7 +77,29 @@ namespace EyeOfBeholder.VsExtension
         protected override void Initialize()
         {
             var componentModel = (IComponentModel) this.GetService(typeof(SComponentModel));
-            var workspace = componentModel.GetService<VisualStudioWorkspace>();
+            workspace = componentModel.GetService<VisualStudioWorkspace>();
+
+            var plantUmlGenerator = new PlantUmlStringGenerator();
+            var diagramGenerator = new DiagramGenerator(plantUmlGenerator);
+            var umlEntitesExtractor = new UmlEntitiesExtractor();
+            var umlContainers = umlEntitesExtractor.GetFrom(workspace.CurrentSolution.Projects, new List<string>() {"B2BPlatform.Services"});
+            var umlStrign = diagramGenerator.GenerateUmlString(umlContainers.SelectMany(c => c.UmlClasses));
+
+            File.WriteAllText(@"PlantUml.txt", umlStrign);
+
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "cmd.exe";
+            cmd.StartInfo.RedirectStandardInput = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.Start();
+
+            cmd.StandardInput.WriteLine(@"java -jar plantuml.jar -tsvg PlantUml.txt");
+            cmd.StandardInput.Flush();
+            cmd.StandardInput.Close();
+            cmd.WaitForExit();
+            //Console.WriteLine(cmd.StandardOutput.ReadToEnd());
 
             WsWorkspaceCustomToolWindowCommand.Initialize(this);
             base.Initialize();
